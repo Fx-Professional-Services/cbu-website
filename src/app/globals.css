@@ -1,33 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind forms;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* 
+<uniquifier>: Use a unique and descriptive class name
+<weight>: Use a value from 400 to 700
+*/
+
+.dancing-script-logo {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  color: #ddb100;
+}
+.dancing-script-normal {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight:normal;
+  font-style: normal;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.bg-cbu{
+  background-color: #ddb100;
 }
