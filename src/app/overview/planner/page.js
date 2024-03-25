@@ -1,5 +1,7 @@
-export default function Planner() {
+export default function Planner({ children }) {
     return (
-        <></>
+        <>
+            { children }
+        </>
     );
 }
