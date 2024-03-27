@@ -62,7 +62,7 @@ export default function EventCard({ data }) {
                     {/* <a href="#" className="text-sm font-semibold leading-6 text-gray-900 hover:shadow-yellow-300">
                         View details <span aria-hidden="true">&rarr;</span>
                     </a> */}
-                    <Link href={`/overview/planner/${data.event_id}`}>View Details</Link>
+                    <Link href={`/overview/planner/${data.event_id}`}>View Details <span aria-hidden="true">&rarr;</span></Link>
                 </div>
             </div>
         </div>
