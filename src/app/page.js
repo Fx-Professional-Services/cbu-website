@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { dancing_script } from "./fonts";
 
 export default function Login() {
   const router = useRouter();
@@ -9,7 +10,7 @@ export default function Login() {
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
-              <h5 className="mt-6 text-3xl font-extrabold leading-5 text-gray-900 dancing-script-logo">Catering By Uptown</h5>
+              <h5 className={`mt-6 text-3xl font-extrabold leading-5 text-gray-900 cbu-logo ${dancing_script.className}`}>Catering By Uptown</h5>
               <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
                 Sign in to your account
               </h2>

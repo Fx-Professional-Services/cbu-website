@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import { dancing_script } from '../fonts';
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
@@ -107,7 +108,7 @@ export default function Sidebar({ children }) {
                                                 src="https://tailwindui.com/img/logos/mark.svg?color=yellow&shade=600"
                                                 alt="Your Company"
                                             /> */}
-                                            <h5 className="mt-6 text-3xl font-extrabold leading-5 text-gray-900 dancing-script-logo">Catering By Uptown</h5>
+                                            <h5 className={`mt-6 text-3xl font-extrabold leading-5 text-gray-900 ${dancing_script.className}`}>Catering By Uptown</h5>
                                         </div>
                                         <nav className="flex flex-1 flex-col">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -189,7 +190,7 @@ export default function Sidebar({ children }) {
                                 src="https://tailwindui.com/img/logos/mark.svg?color=yellow&shade=600"
                                 alt="Your Company"
                             /> */}
-                            <h5 className="mt-6 text-3xl font-extrabold leading-5 text-gray-900 dancing-script-logo">Catering By Uptown</h5>
+                            <h5 className={`mt-6 text-3xl font-extrabold leading-5 text-gray-900 cbu-logo ${dancing_script.className}`}>Catering By Uptown</h5>
                         </div>
                         <nav className="flex flex-1 flex-col">
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">

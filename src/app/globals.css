@@ -8,11 +8,11 @@
 <weight>: Use a value from 400 to 700
 */
 
-.dancing-script-logo {
-  font-family: "Dancing Script", cursive;
+.cbu-logo {
+  /* font-family: "Dancing Script", cursive;
   font-optical-sizing: auto;
   font-weight: 800;
-  font-style: normal;
+  font-style: normal; */
   color: #ddb100;
 }
 .dancing-script-normal {
