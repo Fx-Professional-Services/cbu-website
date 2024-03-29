@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { dancing_script } from '../fonts';
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -17,8 +18,8 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 
-const navigation = [
-    { name: 'Planner', href: '/overview/planner', icon: CalendarIcon, current: true },
+let navigation = [
+    { name: 'Planner', href: '/overview/planner', icon: CalendarIcon, current: false },
     { name: 'Orders', href: '/overview/orders', icon: ClipboardDocumentListIcon, current: false },
     { name: 'Invoices', href: '/overview/invoices', icon: ClipboardDocumentIcon, current: false },
     { name: 'FAQ', href: '/overview/faqs', icon: QuestionMarkCircleIcon, current: false },
@@ -45,8 +46,8 @@ function classNames(...classes) {
 }
 
 export default function Sidebar({ children }) {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
-    const [activeItem, setActiveItem] = useState(null);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const pathname = usePathname();
 
     return (
         <>
@@ -116,12 +117,10 @@ export default function Sidebar({ children }) {
                                                     <ul role="list" className="-mx-2 space-y-1">
                                                         {navigation.map((item) => (
                                                             <li key={item.name}>
-                                                                <Link href={item.href}>
+                                                                <Link href={item.href} legacyBehavior>
                                                                     <a
-                                                                        
-                                                                        // onClick={() => setActiveItem(item.name)}
                                                                         className={classNames(
-                                                                            item.current
+                                                                            pathname === item.href
                                                                                 ? 'bg-gray-50 text-yellow-600'
                                                                                 : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50',
                                                                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -129,7 +128,7 @@ export default function Sidebar({ children }) {
                                                                     >
                                                                         <item.icon
                                                                             className={classNames(
-                                                                                item.current ? 'text-yellow-600' : 'text-gray-400 group-hover:text-yellow-600',
+                                                                                pathname === item.href ? 'text-yellow-600' : 'text-gray-400 group-hover:text-yellow-600',
                                                                                 'h-6 w-6 shrink-0'
                                                                             )}
                                                                             aria-hidden="true"
@@ -198,24 +197,25 @@ export default function Sidebar({ children }) {
                                     <ul role="list" className="-mx-2 space-y-1">
                                         {navigation.map((item) => (
                                             <li key={item.name}>
-                                                <a
-                                                    href={item.href}
-                                                    className={classNames(
-                                                        item.current
-                                                            ? 'bg-gray-50 text-yellow-600'
-                                                            : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50',
-                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                    )}
-                                                >
-                                                    <item.icon
+                                                <Link href={item.href} legacyBehavior>
+                                                    <a
                                                         className={classNames(
-                                                            item.current ? 'text-yellow-600' : 'text-gray-400 group-hover:text-yellow-600',
-                                                            'h-6 w-6 shrink-0'
+                                                            pathname === item.href
+                                                                ? 'bg-gray-50 text-yellow-600'
+                                                                : 'text-gray-700 hover:text-yellow-600 hover:bg-gray-50',
+                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                         )}
-                                                        aria-hidden="true"
-                                                    />
-                                                    {item.name}
-                                                </a>
+                                                    >
+                                                        <item.icon
+                                                            className={classNames(
+                                                                pathname === item.href ? 'text-yellow-600' : 'text-gray-400 group-hover:text-yellow-600',
+                                                                'h-6 w-6 shrink-0'
+                                                            )}
+                                                            aria-hidden="true"
+                                                        />
+                                                        {item.name}
+                                                    </a>
+                                                </Link>
                                             </li>
                                         ))}
                                     </ul>
