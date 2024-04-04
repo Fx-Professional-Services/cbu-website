@@ -1,3 +1,5 @@
+"use client";
+
 const people = [
     {
         "orderId": "123456",
@@ -19,7 +21,7 @@ export default function OrdersPage() {
             <div className="container xl:w-full">
                 <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
-                        
+
                     </div>
                     <div className="px-4 sm:px-6 lg:px-8">
                         <div className="sm:flex sm:items-center">

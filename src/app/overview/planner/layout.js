@@ -35,16 +35,26 @@ export default function PlannerLayout({ children }) {
                 <div className='md:hidden sm:block'>
                     <div className="relative w-full flex gap-6 snap-x overflow-x-auto pb-14">
                         <div className='shrink-0 snap-center w-full inline-block'>
-                            <EventCard data = {
+                            <EventCard data={
                                 {
-                                    'event_name':'J&H wedding',
-                                    'status':'Paid',
-                                    'client':'Alex Curren',
-                                    'event_date':'January 31, 2023',
-                                    'event_cost':'$10,480',
-                                    'event_id':'3'
+                                    'event_name': 'J&H wedding',
+                                    'status': 'Paid',
+                                    'client': 'Alex Curren',
+                                    'event_date': 'January 31, 2023',
+                                    'event_cost': '$10,480',
+                                    'event_id': '3'
                                 }
-                            }/>
+                            } />
+                            <EventCard data={
+                                {
+                                    'event_name': 'Rick & Morty wedding',
+                                    'status': 'Refunded',
+                                    'client': 'Morty Smith',
+                                    'event_date': 'January 31, 2023',
+                                    'event_cost': '$10,480',
+                                    'event_id': '2'
+                                }
+                            } />
                         </div>
                     </div>
                 </div>
