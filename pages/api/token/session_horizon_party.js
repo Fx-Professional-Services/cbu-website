@@ -25,7 +25,6 @@ const getTokenforHorizonParty = async () => {
 
 export default async function SessionParty(req, res) {
   await getTokenforHorizonParty();
-
   // res.status(200).json({ message: token_party });
   return token_party;
 }

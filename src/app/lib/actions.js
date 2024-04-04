@@ -7,7 +7,7 @@ export async function authenticate(__currentState, formData) {
     const password = formData.get('password');
     const url = process.env.NEXT_PUBLIC_URL;
     try {
-        const signInResponse = await signIn({ body: { username, password } });
+        const signInResponse = await signIn({ body: { username, password } }, 'res');
         res.redirect(307, '/overview/planner');
     } catch (error) {
         if (error) {

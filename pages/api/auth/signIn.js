@@ -1,19 +1,21 @@
 "use server";
 import { data } from "autoprefixer";
 import SessionParty from "../token/session_horizon_party";
+import SessionOrder from "../token/session_horizon_order";
+import SessionAccounting from "../token/session_horizon_accounting";
 
 const host = process.env.NEXT_PUBLIC_API_URL;
 const filename = process.env.NEXT_PUBLIC_MAIN_FILE_NAME;
 
 export default async function signIn(req, res) {
-    const token = await SessionParty(req, res);
+    const token_party = await SessionParty(req, res);
     const { username, password } = req.body;
     const response = await fetch(
         `${host}/fmi/data/v1/databases/${filename}/layouts/Customer Portal/_find`,
         {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token_party}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -28,11 +30,18 @@ export default async function signIn(req, res) {
     );
     if (response.ok) {
         const data = await response.json();
+        const token_order = await SessionOrder(req, res);
+        const token_accounting = await SessionAccounting(req, res);
+        res.setHeader("Cache-Control", "s-maxage=900")
         res.status(200).json({
-            message: data.response.data[0].fieldData["Party::display name"]
+            message: {
+                username: data.response.data[0].fieldData["Party::display name"],
+                token_party: token_party,
+                token_order: token_order,
+                token_accounting: token_accounting
+            }
         });
     } else {
-        res.status(400).json({ message: data });
-        // return new Error("CredentialsSignin");
+        res.status(500).json({ message: "Invalid username or password." });
     }
 }

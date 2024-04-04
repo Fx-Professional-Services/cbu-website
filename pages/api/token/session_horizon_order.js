@@ -26,6 +26,6 @@ const getTokenforHorizonOrder = async () => {
 
 export default async function handler(req, res) {
   await getTokenforHorizonOrder();
-
-  res.status(200).json({ message: token_order });
+  // res.status(200).json({ message: token_order });
+  return token_order;
 }

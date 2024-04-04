@@ -10,10 +10,12 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import ErrorAlert from "./components/error_alerts";
 
 import { authenticate } from "./lib/actions";
+import { data } from "autoprefixer";
 
 export default function Login() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   const [isErrorVisible, setErrorVisible] = useState(false);
+  const [errorResponse, setErrorResponse] = useState("");
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -25,13 +27,11 @@ export default function Login() {
   useEffect(() => {
     if (errorMessage) {
       setErrorVisible(true);
-      console.log(isErrorVisible);
     }
   }, [errorMessage]);
 
   const handleCloseError = () => {
     setErrorVisible(false);
-    console.log(isErrorVisible)
   }
 
   const handleSubmit = async (event) => {
@@ -48,9 +48,16 @@ export default function Login() {
     });
 
     if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("token_order", data.message.token_order);
+      localStorage.setItem("token_accounting", data.message.token_accounting);
+      localStorage.setItem("token_party", data.message.token_party);
+      localStorage.setItem("display_name", data.message.username);
       router.push("/overview/planner");
     }
     else {
+      const data = await response.json();
+      setErrorResponse(data.message);
       setErrorVisible(true);
     }
   }
@@ -101,7 +108,7 @@ export default function Login() {
                       />
                     </div>
                   </div>
-                  {isErrorVisible ? <ErrorAlert params={{ header: "Error", content: "Something went wrong.", onClose: handleCloseError }} /> : null}
+                  {isErrorVisible ? <ErrorAlert params={{ header: "Error", content: errorResponse, onClose: handleCloseError }} /> : null}
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">

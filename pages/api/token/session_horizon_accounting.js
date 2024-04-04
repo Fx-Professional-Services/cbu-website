@@ -28,5 +28,6 @@ const getTokenforHorizonAccounting = async () => {
 
 export default async function handler(req, res) {
   await getTokenforHorizonAccounting();
-  res.status(200).json({ message: token_accounting });
+  // res.status(200).json({ message: token_accounting });
+  return token_accounting;
 }
