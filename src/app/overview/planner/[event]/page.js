@@ -13,7 +13,18 @@ export default function EventPage({ params }) {
             <div className="container xl:w-full">
                 <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
-                        <h3 className="text-lg font-semibold leading-6 text-gray-900 my-4">Event: {params.event}</h3>
+                        <h6 className="text-sm font-semibold leading-6 text-gray-900 my-4">Event / Order ID: {params.event}</h6>
+                        <hr />
+                        <div className="flex flex-row">
+                            <div className="flex-auto p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Client Name: </span> <br />
+                                <span className="text-lg font-semibold">Rick Keyser III</span>
+                            </div>
+                            <div className="flex-auto p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Received Date: </span> <br />
+                                <span className="text-lg font-semibold">January 01, 2024</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

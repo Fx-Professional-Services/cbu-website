@@ -3,6 +3,10 @@ import Loading from '@/app/components/loading';
 import EventCard from '../../components/event_details_card';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+import QuestionMarkCircleIcon from '@heroicons/react/20/solid/QuestionMarkCircleIcon';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+
 export default function PlannerLayout({ children }) {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -35,8 +39,25 @@ export default function PlannerLayout({ children }) {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <aside className="fixed inset-y-0 left-72 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
                         {/* Secondary column (hidden on smaller screens) */}
-                        <h2 className="text-lg font-semibold leading-6 text-gray-900 my-4">Events</h2>
-
+                        <div className="flex flex-row">
+                            <div className="flex-auto">
+                                <h2 className="text-lg font-semibold leading-6 text-gray-900 my-4">Events</h2>
+                            </div>
+                            <div className='flex-auto items-end'>
+                                <div className="relative mt-2 rounded-md shadow-sm ms-4">
+                                    <input
+                                        type="text"
+                                        name="search"
+                                        id="account-number"
+                                        className="w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-400 sm:text-sm sm:leading-6"
+                                        placeholder="Search event ID"
+                                    />
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr />
                         {orders.map((order) => {
                             const index = uuidv4();

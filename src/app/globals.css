@@ -15,6 +15,11 @@
   font-style: normal; */
   color: #ddb100;
 }
+
+.cbu-accent-text {
+  color: #ddb100;
+}
+
 .dancing-script-normal {
   font-family: "Dancing Script", cursive;
   font-optical-sizing: auto;
