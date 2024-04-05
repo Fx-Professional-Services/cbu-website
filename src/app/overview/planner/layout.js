@@ -2,6 +2,7 @@
 import Loading from '@/app/components/loading';
 import EventCard from '../../components/event_details_card';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 
 import QuestionMarkCircleIcon from '@heroicons/react/20/solid/QuestionMarkCircleIcon';
@@ -18,16 +19,21 @@ export default function PlannerLayout({ children }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'user': 'Rick Keyser III',
+                'user': localStorage.getItem('display_name'),
                 'token': localStorage.getItem('token_order'),
             }),
         });
+        if (response.status === 401) {
+            localStorage.clear();
+            const router = useRouter();
+            router.push('/');
+        }
+
         const data = await response.json();
         setOrders(data.message);
         setIsLoading(false);
         return response;
     }
-    console.log(orders);
 
     useEffect(() => {
         event_data();
@@ -39,7 +45,7 @@ export default function PlannerLayout({ children }) {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <aside className="fixed inset-y-0 left-72 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
                         {/* Secondary column (hidden on smaller screens) */}
-                        <div className="flex flex-row">
+                        <div className="flex flex-row sticky -top-5 scroll-p-5 transition-all bg-white">
                             <div className="flex-auto">
                                 <h2 className="text-lg font-semibold leading-6 text-gray-900 my-4">Events</h2>
                             </div>
