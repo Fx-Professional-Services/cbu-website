@@ -17,6 +17,8 @@ import {
     UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { store } from '../../../store';
+import { Provider } from 'react-redux';
 
 let navigation = [
     { name: 'Planner', href: '/overview/planner', icon: CalendarIcon, current: false },
@@ -50,7 +52,7 @@ export default function Sidebar({ children }) {
     const pathname = usePathname();
 
     return (
-        <>
+        <Provider store={store}>
             {/*
         This example requires updating your template:
 
@@ -290,6 +292,6 @@ export default function Sidebar({ children }) {
                     <div className="px-4 sm:px-6 lg:px-8">{children}</div>
                 </main>
             </div>
-        </>
+        </Provider>
     )
 }

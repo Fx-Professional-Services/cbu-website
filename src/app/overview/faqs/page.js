@@ -1,3 +1,10 @@
+
+"use client";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement } from '../../../../redux/counter/actions';
+import counterReducer from '../../../../redux/counter/reducer';
+
 const faqs = [
     {
         question: 'I would like to provide meals for my vendors. What kind of meal will my vendors be served?',
@@ -21,7 +28,11 @@ const faqs = [
     },
     // More questions...
 ]
+
 export default function FaqPage() {
+    const count = useSelector((state) => state.counterReducer.count);
+    const dispatch = useDispatch();
+
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-7xl px-6 py-24 sm:pt-32 lg:px-8 lg:py-40">
