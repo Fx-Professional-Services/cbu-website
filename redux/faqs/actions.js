@@ -1,10 +1,9 @@
-import { FETCH_DATA_START, FETCH_DATA_SUCCESS, FETCH_DATA_FAILURE } from './reducer';
+import { FAQS_FETCH_DATA_START, FAQS_FETCH_DATA_SUCCESS, FAQS_FETCH_DATA_FAILURE } from '../constants'
+
 let token_order;
 if (typeof window !== "undefined") {
     token_order = window.localStorage.getItem("token_order");
 }
-
-import { FAQS_FETCH_DATA_START, FAQS_FETCH_DATA_SUCCESS, FAQS_FETCH_DATA_FAILURE } from '../constants'
 
 export const fetchFaqs = () => {
     return async (dispatch) => {
@@ -27,8 +26,6 @@ export const fetchFaqs = () => {
                 }));
                 dispatch({ type: FAQS_FETCH_DATA_SUCCESS, payload: newFaq });
             })
-            .catch((error) => {
-                dispatch({ type: FAQS_FETCH_DATA_FAILURE });
-            });
+            .catch((error) => dispatch({ type: FAQS_FETCH_DATA_FAILURE }));
     };
 };

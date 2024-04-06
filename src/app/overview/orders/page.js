@@ -1,5 +1,9 @@
 "use client";
 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders } from '../../../../redux/orders/actions';
+import { useEffect } from 'react';
+
 const people = [
     {
         "orderId": "123456",
@@ -16,6 +20,13 @@ const people = [
 ]
 
 export default function OrdersPage() {
+    const { orders, loading } = useSelector((state) => state.ordersReducer);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchOrders());
+    }, [dispatch]);
+
     return (
         <>
             <div className="container xl:w-full">
@@ -53,9 +64,6 @@ export default function OrdersPage() {
                                                     Transaction Date
                                                 </th>
                                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    Status
-                                                </th>
-                                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                                     Total
                                                 </th>
                                                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
@@ -64,17 +72,16 @@ export default function OrdersPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                            {people.map((person) => (
-                                                <tr key={person.orderId}>
+                                            {orders.map((order) => (
+                                                <tr key={order.order_id}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                                        {person.orderId}
+                                                        {order.order_id}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.transactionDate}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.status}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.total}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.created}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.total}</td>
                                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                                         <a href="#" className="text-yellow-600 hover:text-yellow-900">
-                                                            Edit<span className="sr-only">, {person.orderId}</span>
+                                                            Edit<span className="sr-only">, {order.orderId}</span>
                                                         </a>
                                                     </td>
                                                 </tr>
