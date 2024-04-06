@@ -2,10 +2,10 @@
 "use client";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { increment, decrement } from '../../../../redux/counter/actions';
-import counterReducer from '../../../../redux/counter/reducer';
+import { fetchFaqs } from '../../../../redux/faqs/actions';
+import { useEffect } from 'react';
 
-const faqs = [
+const faqsTest = [
     {
         question: 'I would like to provide meals for my vendors. What kind of meal will my vendors be served?',
         answer: 'Your vendors will receive the same meal as your guests at hal price (plus service charge and tax).',
@@ -30,8 +30,12 @@ const faqs = [
 ]
 
 export default function FaqPage() {
-    const count = useSelector((state) => state.counterReducer.count);
+    const { faqs, loading } = useSelector((state) => state.faqsReducer);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchFaqs());
+    }, [dispatch]);
 
     return (
         <div className="bg-white">

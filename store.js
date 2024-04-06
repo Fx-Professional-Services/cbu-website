@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './redux/counter/reducer';
+import faqsReducer from './redux/faqs/reducer';
 
 export const store = configureStore({
     reducer: {
-        counterReducer: counterReducer, // Add your slice(s) to the root reducer
-        // Add more slices if you have them
+        faqsReducer: faqsReducer
     },
 });
