@@ -1,4 +1,17 @@
+"use client";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchInvoices } from '../../../../redux/invoices/actions';
+import { useEffect } from 'react';
+
 export default function InvoicesPage() {
+    const { invoices, loading } = useSelector((state) => state.invoicesReducer);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchInvoices());
+    }, [dispatch]);
+
     return (
         <>
             <div className="container xl:w-full">
