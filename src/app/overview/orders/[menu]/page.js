@@ -1,30 +1,15 @@
 "use client";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders } from '../../../../redux/orders/actions';
+import { fetchMenu } from '../../../../../redux/menu/actions';
 import { useEffect } from 'react';
 
-const people = [
-    {
-        "orderId": "123456",
-        "transactionDate": "2022-01-01",
-        "status": "Completed",
-        "total": "$100.00"
-    },
-    {
-        "orderId": "789012",
-        "transactionDate": "2022-01-02",
-        "status": "Pending",
-        "total": "$200.00"
-    }
-]
-
-export default function OrdersPage() {
-    const { orders, loading } = useSelector((state) => state.ordersReducer);
+export default function MenuPage({params}) {
+    const { menu, loading } = useSelector((state) => state.menuReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchOrders());
+        dispatch(fetchMenu(params.menu));
     }, [dispatch]);
 
     return (
@@ -37,9 +22,9 @@ export default function OrdersPage() {
                     <div className="px-4 sm:px-6 lg:px-8">
                         <div className="sm:flex sm:items-center">
                             <div className="sm:flex-auto">
-                                <h1 className="text-base font-semibold leading-6 text-gray-900">Orders</h1>
+                                <h1 className="text-base font-semibold leading-6 text-gray-900">Menu</h1>
                                 <p className="mt-2 text-sm text-gray-700">
-                                    A list of all the orders in your account including their id, total price, transaction date, etc.
+                                    A list of all the items in your order including their name quantity, price, etc.
                                 </p>
                             </div>
                             <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -58,13 +43,13 @@ export default function OrdersPage() {
                                         <thead>
                                             <tr>
                                                 <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                                    Order ID
+                                                    Item Name
                                                 </th>
                                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    Transaction Date
+                                                    Quantity
                                                 </th>
                                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    Total
+                                                    Price
                                                 </th>
                                                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                                     <span className="sr-only">Edit</span>
@@ -72,17 +57,19 @@ export default function OrdersPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                            {orders.map((order) => (
-                                                <tr key={order.order_id}>
+                                            {menu.map((item) => (
+                                                <tr key={item.order_id}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                                        {order.order_id}
+                                                        {item.item_name}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.created}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.total}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.item_qty}</td>
+                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.item_price}</td>
                                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                                        <a href={`/overview/orders/${order.order_id}`} className="text-yellow-600 hover:text-yellow-900">
-                                                            Edit<span className="sr-only">, {order.order_id}</span>
+                                                        {item.is_configurator === 1 && (
+                                                        <a onClick={() => handleOpenModal(item.item_id, item.mod_id, item.item_name, item.configuration_id)} style={{cursor: 'pointer'}}>
+                                                            <FaCog />
                                                         </a>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             ))}

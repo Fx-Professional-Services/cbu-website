@@ -1,5 +1,5 @@
 const initialState = {
-    orders: [{test: "lolol"}],
+    orders: [],
     loading: false,
     error: null,
 };
