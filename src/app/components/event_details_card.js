@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { CalendarDaysIcon, CreditCardIcon, UserCircleIcon } from '@heroicons/react/20/solid'
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react';
+import Loading from './loading';
 
 export default function EventCard({ data }) {
     // Set the status color based on the status
@@ -34,7 +35,8 @@ export default function EventCard({ data }) {
                         <div className="flex-none self-end px-6 pt-4">
                             <dt className="sr-only">Type</dt>
                             <dd className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 bg-green-50 ${status_color}`} style={{ textTransform: 'capitalize' }}>
-                                {data["Item::type"]}
+                                {/* {data["Item::type"]} */}
+                                Event
                             </dd>
                         </div>
                         <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
@@ -73,11 +75,7 @@ export default function EventCard({ data }) {
     }
     else {
         return (
-            <div className="flex items-center justify-center h-96">
-                <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
-                </svg>
-                Processing...
-            </div>
+            <Loading />
         );
     }
 }

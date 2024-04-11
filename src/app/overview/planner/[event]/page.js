@@ -16,14 +16,38 @@ export default function EventPage({ params }) {
                         <span className="text-sm font-semibold leading-6 text-gray-900 my-10">Event / Order ID: </span>
                         <span className="text-lg cbu-accent-text font-semibold"> {params.event}</span>
                         <hr />
-                        <div className="flex flex-row">
-                            <div className="flex-auto p-5">
+                        <div className="grid grid-cols-2 gap-1">
+                            <div className="p-5">
                                 <span className="text-sm font-semibold cbu-accent-text">Client Name: </span> <br />
                                 <span className="text-lg font-semibold">Rick Keyser III</span>
                             </div>
-                            <div className="flex-auto p-5">
+                            <div className="p-5">
                                 <span className="text-sm font-semibold cbu-accent-text">Received Date: </span> <br />
                                 <span className="text-lg font-semibold">January 01, 2024</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Location: </span> <br />
+                                <span className="text-lg font-semibold">{ params.location ?? "No data available" }</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Time: </span> <br />
+                                <span className="text-lg font-semibold">{params.location ?? "No data available"}</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Location: </span> <br />
+                                <span className="text-lg font-semibold">{params.location ?? "No data available"}</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Number of Guests: </span> <br />
+                                <span className="text-lg font-semibold">{params.location ?? "No data available"}</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Start Date / End Date: </span> <br />
+                                <span className="text-lg font-semibold">{params.location ?? "No data available"}</span>
+                            </div>
+                            <div className="p-5">
+                                <span className="text-sm font-semibold cbu-accent-text">Contract Price: </span> <br />
+                                <span className="text-lg font-semibold">{params.event_cost ?? "No data available"}</span>
                             </div>
                         </div>
                     </div>

@@ -11,11 +11,13 @@ import ErrorAlert from "./components/error_alerts";
 
 import { authenticate } from "./lib/actions";
 import { data } from "autoprefixer";
+import Loading from "./components/loading";
 
 export default function Login() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   const [isErrorVisible, setErrorVisible] = useState(false);
   const [errorResponse, setErrorResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -35,6 +37,7 @@ export default function Login() {
   }
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const response = await fetch("/api/auth/signIn", {
       method: "POST",
@@ -53,11 +56,13 @@ export default function Login() {
       localStorage.setItem("token_accounting", data.message.token_accounting);
       localStorage.setItem("token_party", data.message.token_party);
       localStorage.setItem("display_name", data.message.username);
+      setIsLoading(false);
       router.push("/overview/planner");
     }
     else {
       const data = await response.json();
       setErrorResponse(data.message);
+      setIsLoading(false);
       setErrorVisible(true);
     }
   }
@@ -65,6 +70,15 @@ export default function Login() {
   return (
     <>
       <div className="flex min-h-full flex-1">
+        {isLoading &&
+          <div className="static">
+            <div className="absolute lg:bg-transparent bg-gray-100/50 h-full w-full lg:w-[25%] inset-0 z-30">
+              <div className="absolute top-[40%] left-[39%]">
+                <Loading />
+              </div>
+            </div>
+          </div>
+        }
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
