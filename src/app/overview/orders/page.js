@@ -3,6 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from '../../../../redux/orders/actions';
 import { useEffect } from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 const people = [
     {
@@ -72,8 +73,10 @@ export default function OrdersPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                            {orders.map((order) => (
-                                                <tr key={order.order_id}>
+                                            {orders.map((order) => {
+                                                const itemID = uuidv4();
+                                                return (
+                                                    <tr key={itemID}>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                                         {order.order_id}
                                                     </td>
@@ -85,7 +88,8 @@ export default function OrdersPage() {
                                                         </a>
                                                     </td>
                                                 </tr>
-                                            ))}
+                                                )
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
