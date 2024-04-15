@@ -26,17 +26,6 @@ export default function Payment() {
                         </div>
                     </div>
                 </main>
-                {/* <footer className="self-end lg:col-span-2 lg:col-start-1 lg:row-start-3">
-                    <div className="border-t border-gray-100 bg-gray-50 py-10">
-                        <nav className="mx-auto flex w-full max-w-7xl items-center gap-x-4 px-6 text-sm leading-7 text-gray-600 lg:px-8">
-                            <a href="#">Contact support</a>
-                            <svg viewBox="0 0 2 2" aria-hidden="true" className="h-0.5 w-0.5 fill-gray-300">
-                                <circle cx={1} cy={1} r={1} />
-                            </svg>
-                            <a href="#">Status</a>
-                        </nav>
-                    </div>
-                </footer> */}
                 <div className="hidden lg:relative lg:col-start-2 lg:row-start-1 lg:row-end-4 lg:block">
                     <img
                         src="https://images.unsplash.com/photo-1470847355775-e0e3c35a9a2c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1825&q=80"
