@@ -14,7 +14,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 //     { name: 'Security', description: 'Understand how we take your privacy seriously', href: '#' },
 // ]
 
-export default function Popover({ solutions, buttonName }) {
+export default function PopoverModal({ solutions, buttonName }) {
     return (
         <Popover className="relative">
             <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">

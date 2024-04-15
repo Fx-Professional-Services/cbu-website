@@ -2,16 +2,16 @@
 import Loading from '@/app/components/loading';
 import EventCard from '../../components/event_details_card';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
-import QuestionMarkCircleIcon from '@heroicons/react/20/solid/QuestionMarkCircleIcon';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export default function PlannerLayout({ children }) {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const router = useRouter();
+    
     const event_data = async () => {
         const response = await fetch('/api/portal/getsalesorders', {
             method: 'POST',
@@ -25,7 +25,6 @@ export default function PlannerLayout({ children }) {
         });
         if (response.status === 401) {
             localStorage.clear();
-            const router = useRouter();
             router.push('/');
         }
 
