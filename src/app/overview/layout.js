@@ -27,8 +27,8 @@ let navigation = [
     { name: 'FAQ', href: '/overview/faqs', icon: QuestionMarkCircleIcon, current: false },
 ]
 const teams = [
-    { id: 1, name: 'My Information', href: '#', initial: 'I', current: false },
-    { id: 1, name: 'Payment Details', href: '#', initial: 'P', current: false },
+    { id: 1, name: 'My Information', href: '/overview/profile', initial: 'I', current: false },
+    { id: 1, name: 'Payment Details', href: '/overview/payment', initial: 'P', current: false },
 ]
 
 const solutions = [

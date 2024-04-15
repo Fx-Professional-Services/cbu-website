@@ -13,7 +13,6 @@ export default function InvoicesPage() {
     }, [dispatch]);
 
     return (
-        <>
             <div className="container xl:w-full">
                 <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
@@ -119,6 +118,5 @@ export default function InvoicesPage() {
                     </div>
                 </div>
             </div>
-        </>
     );
 }
