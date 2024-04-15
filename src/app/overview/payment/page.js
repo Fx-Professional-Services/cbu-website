@@ -17,7 +17,7 @@ export default function Payment() {
                         {/* <p className="text-base font-semibold leading-8 text-indigo-600">404</p> */}
                         <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-5xl cbu-accent-text">Page still in Development</h1>
                         <p className="mt-6 text-base leading-7 text-gray-600">
-                            Sorry, we're still building this page for you.
+                            Sorry, we&apos;re still building this page for you.
                         </p>
                         <div className="mt-10">
                             <a href="/overview/planner" className="text-sm font-semibold leading-7 text-yellow-600">
