@@ -1,6 +1,6 @@
 const host = process.env.NEXT_PUBLIC_API_URL;
 export default async function handler(req, res) {
-    const { user, token } = req.body;
+    const { user, token, id } = req.body;
     if (req.method === 'POST') {
         const response = await fetch(
             `${host}/fmi/data/v1/databases/horizon order/layouts/query: Sales Orders (CBU website)/_find`,

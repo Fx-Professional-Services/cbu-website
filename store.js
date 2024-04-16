@@ -3,12 +3,14 @@ import faqsReducer from './redux/faqs/reducer';
 import ordersReducer from './redux/orders/reducer';
 import invoicesReducer from './redux/invoices/reducer';
 import menuReducer from './redux/menu/reducer';
+import eventsReducer from './redux/events/reducer';
 
 export const store = configureStore({
     reducer: {
         faqsReducer: faqsReducer,
         ordersReducer: ordersReducer,
         invoicesReducer: invoicesReducer,
-        menuReducer: menuReducer
+        menuReducer: menuReducer,
+        eventsReducer: eventsReducer
     },
 });
