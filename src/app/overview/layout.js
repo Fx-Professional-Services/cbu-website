@@ -50,6 +50,7 @@ function classNames(...classes) {
 export default function Sidebar({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pathname = usePathname();
+    const user_name = window.localStorage.getItem('display_name');
 
     return (
         <Provider store={store}>
@@ -259,11 +260,11 @@ export default function Sidebar({ children }) {
                                         >
                                             <img
                                                 className="h-8 w-8 rounded-full bg-gray-50"
-                                                src="https://images.pexels.com/photos/6956149/pexels-photo-6956149.jpeg"
+                                                src="https://images.pexels.com/photos/1081685/pexels-photo-1081685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                                 alt=""
                                             />
                                             <span className="sr-only">Your profile</span>
-                                            <span aria-hidden="true">Rick Keyser III</span>
+                                            <span aria-hidden="true">{user_name}</span>
                                         </a>
                                     </Link>
                                 </li>
