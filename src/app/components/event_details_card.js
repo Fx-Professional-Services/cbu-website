@@ -67,7 +67,10 @@ export default function EventCard({ data }) {
                         {/* <a href="#" className="text-sm font-semibold leading-6 text-gray-900 hover:shadow-yellow-300">
                         View details <span aria-hidden="true">&rarr;</span> 
                     </a> */}
-                        <Link href={`/overview/planner/${data["record id"]}`} className={`hover:text-yellow-600 ${isDispayed ? 'text-yellow-600' : ''}`}>View Details <span aria-hidden="true">&rarr;</span></Link>
+                        <Link href={`/overview/planner/${data["record id"]}?user_name=${data["sales order__PARTY::display name"]}`}
+                            className={`hover:text-yellow-600 ${isDispayed ? 'text-yellow-600' : ''}`}>
+                            View Details <span aria-hidden="true">&rarr;</span>
+                        </Link>
                     </div>
                 </div>
             </div>

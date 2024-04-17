@@ -1,4 +1,9 @@
+"use client";
+import { useSearchParams } from "next/navigation";
+
 export default function EventPage({ params }) {
+    const userParams = useSearchParams();
+    const user_name = userParams.get('user_name');
     return (
         <>
             {/* <h2 className="text-lg font-semibold leading-6 text-gray-900 my-4">Event Details</h2>
@@ -19,7 +24,7 @@ export default function EventPage({ params }) {
                         <div className="grid grid-cols-2 gap-1">
                             <div className="p-5">
                                 <span className="text-sm font-semibold cbu-accent-text">Client Name: </span> <br />
-                                <span className="text-lg font-semibold">Rick Keyser III</span>
+                                <span className="text-lg font-semibold">{user_name}</span>
                             </div>
                             <div className="p-5">
                                 <span className="text-sm font-semibold cbu-accent-text">Received Date: </span> <br />

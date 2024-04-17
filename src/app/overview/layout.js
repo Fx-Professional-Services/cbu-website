@@ -19,6 +19,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { store } from '../../../store';
 import { Provider } from 'react-redux';
+import { useEffect } from 'react';
 
 let navigation = [
     { name: 'Planner', href: '/overview/planner', icon: CalendarIcon, current: false },
@@ -49,10 +50,14 @@ function classNames(...classes) {
 
 export default function Sidebar({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [userName, setUserName] = useState(null);
     const pathname = usePathname();
-    const user_name = window.localStorage.getItem('display_name');
 
-    return (
+    useEffect(() => {
+        setUserName(window.localStorage.getItem('display_name'));
+    }, []);
+
+    if(userName){return (
         <Provider store={store}>
             {/*
         This example requires updating your template:
@@ -264,7 +269,7 @@ export default function Sidebar({ children }) {
                                                 alt=""
                                             />
                                             <span className="sr-only">Your profile</span>
-                                            <span aria-hidden="true">{user_name}</span>
+                                            <span aria-hidden="true">{userName}</span>
                                         </a>
                                     </Link>
                                 </li>
@@ -295,4 +300,10 @@ export default function Sidebar({ children }) {
             </div>
         </Provider>
     )
+    }
+    else {
+        return (
+            <div>Loading...</div>
+        );
+    }
 }
