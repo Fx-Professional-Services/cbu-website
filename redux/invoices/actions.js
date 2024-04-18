@@ -27,16 +27,17 @@ export const fetchInvoices = () => {
             .then((response) => response.json())
             .then((data) => {
                 invoiceData = data.message.map((element) => ({
-                    __id: element.fieldData["__id"],
-                    serial: element.fieldData.serial,
-                    created: element.fieldData.created,
-                    total: element.fieldData.total,
+                    __id: element.fieldData["record id"],
+                    transdactionDate: element.fieldData["transaction date"],
+                    total: element.fieldData["total"],
+                    taxes: element.fieldData["taxes"],
+                    orderItems: element.portalData["Order Item"]
                 }));
 
                 if (process.env.NODE_ENV === "development") {
                     dispatch({
                         type: INVOICES_FETCH_DATA_SUCCESS,
-                        payload: Array.from(new Set(allItems.map(JSON.stringify))).map(JSON.parse)
+                        payload: Array.from(new Set(invoiceData.map(JSON.stringify))).map(JSON.parse)
                     })
                 } else {
                     dispatch({ type: INVOICES_FETCH_DATA_SUCCESS, payload: InvoiceItems})

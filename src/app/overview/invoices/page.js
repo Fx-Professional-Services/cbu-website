@@ -3,6 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchInvoices } from '../../../../redux/invoices/actions';
 import { useEffect } from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 export default function InvoicesPage() {
     const { invoices, loading } = useSelector((state) => state.invoicesReducer);
@@ -48,10 +49,10 @@ export default function InvoicesPage() {
                                                     Transaction Date
                                                 </th>
                                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    Status
+                                                    Total
                                                 </th>
                                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    Total
+                                                    Taxes
                                                 </th>
                                                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                                     <span className="sr-only">Edit</span>
@@ -59,57 +60,28 @@ export default function InvoicesPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-300">
-                                            <tr>
-                                                <td className="pl-4 pr-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900 sm:pl-0">
-                                                    123456
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    2022-01-01
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    Completed
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    $100.00
-                                                </td>
-                                                <td className="pl-3 pr-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="#" className="text-yellow-600 hover:text-yellow-900">Edit</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="pl-4 pr-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900 sm:pl-0">
-                                                    789012
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    2022-01-02
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    Pending
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    $200.00
-                                                </td>
-                                                <td className="pl-3 pr-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="#" className="text-yellow-600 hover:text-yellow-900">Edit</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className="pl-4 pr-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900 sm:pl-0">
-                                                    345678
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    2022-01-03
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    Completed
-                                                </td>
-                                                <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                                    $300.00
-                                                </td>
-                                                <td className="pl-3 pr-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="#" className="text-yellow-600 hover:text-yellow-900">Edit</a>
-                                                </td>
-                                            </tr>
+                                            {invoices.map((invoice) => {
+                                                const itemID = uuidv4();
+                                                return (
+                                                    <tr key={itemID}>
+                                                        <td className="pl-4 pr-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900 sm:pl-0">
+                                                            {invoice.__id}
+                                                        </td>
+                                                        <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                                            {invoice.transactionDate}
+                                                        </td>
+                                                        <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                                            {invoice.total}
+                                                        </td>
+                                                        <td className="px-3 py-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                                            {invoice.taxes}
+                                                        </td>
+                                                        <td className="pl-3 pr-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <a href="#" className="text-yellow-600 hover:text-yellow-900">Edit</a>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
