@@ -9,13 +9,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const people = [
     {
-        "orderId": "123456",
+        "orderId": "1",
         "transactionDate": "2022-01-01",
         "status": "Completed",
         "total": "$100.00"
     },
     {
-        "orderId": "789012",
+        "orderId": "2",
         "transactionDate": "2022-01-02",
         "status": "Pending",
         "total": "$200.00"
