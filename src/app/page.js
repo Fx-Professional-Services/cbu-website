@@ -56,6 +56,7 @@ export default function Login() {
       localStorage.setItem("token_accounting", data.message.token_accounting);
       localStorage.setItem("token_party", data.message.token_party);
       localStorage.setItem("display_name", data.message.username);
+      localStorage.setItem("uid", data.message.uid);
       setIsLoading(false);
       router.push("/overview/planner");
     }

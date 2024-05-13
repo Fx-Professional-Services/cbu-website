@@ -1,8 +1,7 @@
 "use server";
-import { data } from "autoprefixer";
-import SessionParty from "../token/session_horizon_party";
-import SessionOrder from "../token/session_horizon_order";
 import SessionAccounting from "../token/session_horizon_accounting";
+import SessionOrder from "../token/session_horizon_order";
+import SessionParty from "../token/session_horizon_party";
 
 const host = process.env.NEXT_PUBLIC_API_URL;
 const filename = process.env.NEXT_PUBLIC_MAIN_FILE_NAME;
@@ -36,6 +35,7 @@ export default async function signIn(req, res) {
         res.status(200).json({
             message: {
                 username: data.response.data[0].fieldData["Party::display name"],
+                uid: data.response.data[0].fieldData["id"],
                 token_party: token_party,
                 token_order: token_order,
                 token_accounting: token_accounting
