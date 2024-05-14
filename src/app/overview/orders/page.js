@@ -7,21 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
-const people = [
-    {
-        "orderId": "123456",
-        "transactionDate": "2022-01-01",
-        "status": "Completed",
-        "total": "$100.00"
-    },
-    {
-        "orderId": "789012",
-        "transactionDate": "2022-01-02",
-        "status": "Pending",
-        "total": "$200.00"
-    }
-]
-
 export default function OrdersPage() {
     const { orders, loading } = useSelector((state) => state.ordersReducer);
     const dispatch = useDispatch();
