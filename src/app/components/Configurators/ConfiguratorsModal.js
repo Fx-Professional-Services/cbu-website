@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchConfigurationOptions } from "../../../../redux/configurations/actions";
 import { useEffect } from "react";
 export const ConfiguratorsModal = ({title, open, setOpen, children}) => {
-	console.log(title)
+
 	// const configurationId = item["__id"];
 	// const { configurations, loading } = useSelector((state) => state.menuReducer);
     // const dispatch = useDispatch();
