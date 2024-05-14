@@ -10,7 +10,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 export default function OrdersPage() {
     const { orders, loading } = useSelector((state) => state.ordersReducer);
     const dispatch = useDispatch();
-    console.log(orders)
 
     useEffect(() => {
         dispatch(fetchOrders());
