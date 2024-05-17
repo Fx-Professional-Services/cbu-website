@@ -1,6 +1,7 @@
 import { CONFIGURATION_OPTIONS_FETCH_DATA_FAILURE, CONFIGURATION_OPTIONS_FETCH_DATA_START, CONFIGURATION_OPTIONS_FETCH_DATA_SUCCESS } from '../constants';
 
 export const fetchConfigurationOptions = (itemId) => {
+
     return async (dispatch) => {
         dispatch({ type: CONFIGURATION_OPTIONS_FETCH_DATA_START });
 

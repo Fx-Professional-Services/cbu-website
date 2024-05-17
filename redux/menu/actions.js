@@ -62,6 +62,7 @@ export const fetchMenu = (itemId) => {
           delete data["@odata.editLink"];
           delete data["@odata.id"];
           delete data["@odata.context"];
+            
           return {
             ...element,
             itemData: data
