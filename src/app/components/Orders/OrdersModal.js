@@ -6,12 +6,12 @@ import { fetchCategoryItems } from "../../../../redux/category_items/actions";
 import { useEffect, useState } from "react";
 import { ConfiguratorsModal } from "../Configurators/ConfiguratorsModal";
 
+
 export const OrdersModal = ({item, open, setOpen, index}) => {
 	
 	let configurationId = item?.itemData["__id"];
-	const [openConfigurator, setOpenConfigurator] = useState(false);
-	const [selectedIndex, setSelectedIndex] = useState({})
-	const [modalTitle, setModalTitle] = useState()
+	const [selectedConfiguration, setSelectedConfiguration] = useState("")
+
 	const { configurations, loading } = useSelector((state) => state.configurationsReducer);
 	const {categoryItems, loading: categoryLoading} = useSelector((state) => state.categoryItemsReducer);
 
@@ -21,74 +21,106 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
         dispatch(fetchConfigurationOptions(configurationId));
     }, [open]);
 
-	const handleConfiguratorModal = (id, name, categoryId) => {
-		setSelectedIndex({[id]: true, ...selectedIndex})
-		setModalTitle(name)
-		if(categoryId) dispatch(fetchCategoryItems(categoryId))
-		setOpenConfigurator(true);
+	const handleConfiguratorModal = (id, categoryId) => {
+		setSelectedConfiguration(id)
+		dispatch(fetchCategoryItems(categoryId))
 	}
-
-	console.log(configurations)
-	console.log(item)
+	
 	return(
 		<>
-			
 			<PanelSlide open={open} setOpen={setOpen}>
 				<h2 className="text-lg font-bold">{item?.itemData?.name}</h2>
-				<span className="text-sm">
+				{/* <span className="text-sm">
 					Select buttercreams and flavors for your cake
-				</span>
+				</span> */}
 				{
 					!loading ? 
 					<>
-						<div className="mt-10">
+						<div className="mt-5">
 							<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
 								<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-								<div className="mt-8">
-									<div className="flow-root">
-									<ul role="list" className="-my-6 divide-y divide-gray-200">
-									{configurations?.map((configuration) => (
-									<>
-									<li className="flex py-6">
-										<div className="ml-4 flex flex-1 flex-col">
-											<div>
-											<div className="flex justify-between text-base font-medium text-gray-900">
-												<h3>
-													{configuration?.categoryData["display text"]}
-												</h3>
-											</div>
-											
-											</div>
-											<div className="flex flex-1 items-end justify-between text-sm">
-											<p className="text-gray-500">
-												Quantity: {configuration["maximum quantity"]}
-											</p>
-
-											<div className="flex">
-												<button
-												type="button"
-												className="font-medium text-yellow-600 hover:text-yellow-500"
-												onClick={() => handleConfiguratorModal(configuration["__id"], configuration?.categoryData["display text"], configuration["_category id"])}
+									<div className="mt-8">
+										<div className="flex justify-between">
+											<ul role="list" className="w-[30%] divide-y divide-gray-200">
+											{configurations?.map((configuration) => (
+											<>
+												<li 
+													key={configuration["__id"]} 
+													className={`${selectedConfiguration == configuration["__id"] && "text-yellow-600 bg-gray-50" } flex cursor-pointer py-4 text-gray-900 rounded-xl hover:bg-gray-50 hover:text-yellow-600`}
+													onClick={() => {
+														handleConfiguratorModal(configuration["__id"], configuration["_category id"])
+													}}
 												>
-												{
-													configuration?.type
-												}
-												</button>
-											</div>
-											</div>
+													<div className="ml-4 flex flex-1 flex-col">
+														<div>
+														<div className="flex justify-between text-base font-medium ">
+															<h3>
+																{configuration?.categoryData["display text"]}
+															</h3>
+														</div>
+														
+														</div>
+														<div className="flex flex-1 items-end justify-between text-sm">
+														<p>
+															Quantity: {configuration["maximum quantity"]}
+														</p>
+
+														</div>
+													</div>
+												</li>
+											</>	
+											))}
+											</ul>
+											<table className="w-[60%] divide-y divide-gray-300">
+												<thead>
+													<tr>
+														<th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 w-[80%]">
+															Item Name
+														</th>
+														<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+															Price
+														</th>
+													</tr>
+												</thead>
+												<tbody className="divide-y divide-gray-200">
+													{
+														selectedConfiguration != "" ?
+															categoryLoading ?
+															<>
+																<tr>
+																<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>Loading ...</td>
+																
+															</tr>
+															</>
+															:
+																categoryItems && categoryItems.length != 0 &&
+																	categoryItems.map((category)=>{
+																		return(
+																			<>
+																			<tr className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
+																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
+																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
+																			</tr>
+																			</>
+																		)
+																})
+														: <>
+															<tr>
+																<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>Please choose a category on the left first</td>
+																
+															</tr>
+														</>
+													}
+													
+													
+												</tbody>
+											</table>
 										</div>
-									</li>
-									
-										<ControlledModal key={configuration["__id"]} name={modalTitle} open={openConfigurator && selectedIndex[configuration["__id"]]} setOpen={setOpenConfigurator} categoryLoading={categoryLoading} categories={categoryItems} handleConfiguratorModal={handleConfiguratorModal} selectedIndex={selectedIndex} dispatch={dispatch}/>
-										
-									</>
-									
-									))}
-								</ul>
+									</div>
+								</div>
 							</div>
-							</div>
-						</div>
-							</div>
+
+
 							<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
 								<div className="flex justify-between text-base font-medium text-gray-900">
 									<p>Subtotal</p>
@@ -136,98 +168,6 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 					
 				}
 			</PanelSlide>
-		</>
-	)
-}
-
-const ControlledModal = ({name, open, setOpen, categories, categoryLoading, dispatch}) => {
-	const [openSubConfigurator, setOpenSubConfigurator] = useState(false)
-	const [selectedSubConIndex, setSelectedSubConIndex] = useState()
-
-	const handleClick = (itemId, item) => {
-		
-        setSelectedSubConIndex(itemId)
-        setOpenSubConfigurator(true)
-		setOpen(true)
-    }
-
-	return(
-		<>
-		<ConfiguratorsModal open={open} setOpen={setOpen}>
-			<h2 className="text-lg font-bold">{name}</h2>
-			<span className="text-sm">
-				Select item for your {name}
-			</span>
-			{
-				!categoryLoading ? 
-				<>
-					<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-						<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 mt-8">
-							<div className="mt-8">
-								<div className="flow-root">
-									<ul role="list" className="-my-6 divide-y divide-gray-200">
-									{categories?.map((item) => (
-										<>
-										<li className="flex py-6">
-											<div className="ml-4 flex flex-1 flex-col">
-												<div>
-												<div className="flex justify-between text-base font-medium text-gray-900">
-													<h3>
-														{item?.itemData?.name}
-													</h3>
-													<button
-														type="button"
-														className="font-medium text-yellow-600 hover:text-yellow-500"
-														onClick={() => handleClick(item["__id"], item)}
-														>
-														 select one
-													</button>
-												</div>
-												</div>		
-											</div>
-										</li>
-										</>
-										))}
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</>
-				:
-				<>
-					<div className="mt-10">
-						<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-							<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-								<div className="mt-8">
-									<div className="flow-root">
-									<div class="animate-pulse space-x-4">
-											<div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6 mb-8">
-												<div className="sm:col-span-full">
-													<div class="h-2 bg-slate-700 rounded mt-10">
-													</div>
-													<div class="h-2 bg-slate-700 rounded mt-10">
-													</div>
-													<div class="h-2 bg-slate-700 rounded mt-10">
-													</div>
-													<div class="h-2 bg-slate-700 rounded mt-10">
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</>
-			}
-
-		</ConfiguratorsModal>
-
-		<ConfiguratorsModal open={openSubConfigurator} setOpen={setOpenSubConfigurator}>
-			
-		</ConfiguratorsModal>
 		</>
 	)
 }

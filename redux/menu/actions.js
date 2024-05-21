@@ -1,7 +1,5 @@
 import { MENU_FETCH_DATA_FAILURE, MENU_FETCH_DATA_START, MENU_FETCH_DATA_SUCCESS } from '../constants';
 
-const token_order = typeof window !== "undefined" ? localStorage.getItem("token_order") : null;
-
 export const fetchMenu = (itemId) => {
     return async (dispatch) => {
         dispatch({ type: MENU_FETCH_DATA_START });
@@ -18,9 +16,10 @@ export const fetchMenu = (itemId) => {
           });
           const { data } = await response.json();
 
-          let items = await getItems(data);
-          // const result = buildHierarchy(renameFields(data));
-          dispatch({ type: MENU_FETCH_DATA_SUCCESS, payload: items });
+          let orderItems  = await getItems(data);
+          const result = getParentChildOrderItems(orderItems);
+
+          dispatch({ type: MENU_FETCH_DATA_SUCCESS, payload: result });
         } catch (error) {
             dispatch({ type: MENU_FETCH_DATA_FAILURE });
             console.log(error);
@@ -28,21 +27,28 @@ export const fetchMenu = (itemId) => {
     };
 };
 
-// const buildHierarchy = (items, parentId = '', level = 0) => {
-//     const filteredItems = items.filter(item => item.parent_id === parentId && item.item_level === Number(level));
+const getParentChildOrderItems = (orders) => {
+  let orderMap = new Map();
+    
+  // Initialize the map and add a 'suborders' array to each order
+  orders.forEach(order => {
+      order.subOrders = [];
+      orderMap.set(order.__id, order);
+  });
   
-//     if (filteredItems.length === 0) { 
-//       return [];
-//     }
+  // Iterate over the orders and place each order into its parent's suborders array
+  let rootOrders = [];
+  orders.forEach(order => {
+      if (order["_parent order item id"]) {
+          let parentOrder = orderMap.get(order["_parent order item id"]);
+          parentOrder.subOrders.push(order);
+      } else {
+          rootOrders.push(order);
+      }
+  });
   
-//     return filteredItems.map(item => {
-//       const childItems = buildHierarchy(items, item.item_id, String(Number(level) + 1));
-//       if (childItems.length > 0) {
-//         return { ...item, childItems };
-//       }
-//       return item;
-//     });
-// };
+  return rootOrders;
+}
 
   const getItems = (data) => {
     let fetchPromises = data.map(element => {
