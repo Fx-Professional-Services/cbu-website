@@ -20,7 +20,7 @@ export default function OrdersPage() {
             searchOrders(event.target.value);
         }
     }
-    console.log(orders)
+    // console.log(orders)
     return (
         <>
             <div className="container xl:w-full">
@@ -79,23 +79,36 @@ export default function OrdersPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                            {orders.map((order) => {
-                                                const itemID = uuidv4();
-                                                return (
-                                                    <tr key={itemID}>
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                                        {order.order_id}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.created}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.total}</td>
-                                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                                        <a href={`/overview/orders/${order.order_id}`} className="text-yellow-600 hover:text-yellow-900">
-                                                            Edit<span className="sr-only">, {order.order_id}</span>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                )
-                                            })}
+                                            {
+                                                !loading ? 
+                                                <>
+                                                    {orders.map((order) => {
+                                                        const itemID = uuidv4();
+                                                        return (
+                                                            <tr key={itemID}>
+                                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                                                {order.order_id}
+                                                            </td>
+                                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.created}</td>
+                                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{order.total}</td>
+                                                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                                                <a href={`/overview/orders/${order.order_id}`} className="text-yellow-600 hover:text-yellow-900">
+                                                                    Edit<span className="sr-only">, {order.order_id}</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        )
+                                                    })}
+                                                </>
+                                                :
+                                                <>
+                                                    <tr>
+                                                        <td colSpan={4} className="text-center whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                                           Loading ...
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
