@@ -6,128 +6,168 @@ import { fetchCategoryItems } from "../../../../redux/category_items/actions";
 import { useEffect, useState } from "react";
 import { ConfiguratorsModal } from "../Configurators/ConfiguratorsModal";
 
-export const OrdersModal = ({item, open, setOpen}) => {
-	const configurationId = item?.itemData["__id"];
-	const [openConfigurator, setOpenConfigurator] = useState(false);
-	const [selectedIndex, setSelectedIndex] = useState(null)
+
+export const OrdersModal = ({item, open, setOpen, index}) => {
+	
+	let configurationId = item?.itemData["__id"];
+	const [selectedConfiguration, setSelectedConfiguration] = useState("")
+
 	const { configurations, loading } = useSelector((state) => state.configurationsReducer);
 	const {categoryItems, loading: categoryLoading} = useSelector((state) => state.categoryItemsReducer);
+
     const dispatch = useDispatch();
 
 	useEffect(() => {
         dispatch(fetchConfigurationOptions(configurationId));
-    }, [dispatch]);
+    }, [open]);
 
 	const handleConfiguratorModal = (id, categoryId) => {
-		setSelectedIndex(id)
+		setSelectedConfiguration(id)
 		dispatch(fetchCategoryItems(categoryId))
-		setOpenConfigurator(true);
 	}
-
+	
 	return(
 		<>
 			<PanelSlide open={open} setOpen={setOpen}>
 				<h2 className="text-lg font-bold">{item?.itemData?.name}</h2>
-				<span className="text-sm">
+				{/* <span className="text-sm">
 					Select buttercreams and flavors for your cake
-				</span>
-				<div className="mt-10">
-						<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-						  <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-							<div className="mt-8">
-							  <div className="flow-root">
-								<ul role="list" className="-my-6 divide-y divide-gray-200">
-								{configurations?.map((configuration) => (
-								<>
-								<li className="flex py-6">
-									<div className="ml-4 flex flex-1 flex-col">
-										<div>
-										<div className="flex justify-between text-base font-medium text-gray-900">
-											<h3>
-												{configuration?.categoryData["display text"]}
-											</h3>
-										</div>
-										
-										</div>
-										<div className="flex flex-1 items-end justify-between text-sm">
-										<p className="text-gray-500">
-											Quantity: {configuration["maximum quantity"]}
-										</p>
+				</span> */}
+				{
+					!loading ? 
+					<>
+						<div className="mt-5">
+							<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+								<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+									<div className="mt-8">
+										<div className="flex justify-between">
+											<ul role="list" className="w-[30%] divide-y divide-gray-200">
+											{configurations?.map((configuration) => (
+											<>
+												<li 
+													key={configuration["__id"]} 
+													className={`${selectedConfiguration == configuration["__id"] && "text-yellow-600 bg-gray-50" } flex cursor-pointer py-4 text-gray-900 rounded-xl hover:bg-gray-50 hover:text-yellow-600`}
+													onClick={() => {
+														handleConfiguratorModal(configuration["__id"], configuration["_category id"])
+													}}
+												>
+													<div className="ml-4 flex flex-1 flex-col">
+														<div>
+														<div className="flex justify-between text-base font-medium ">
+															<h3>
+																{configuration?.categoryData["display text"]}
+															</h3>
+														</div>
+														
+														</div>
+														<div className="flex flex-1 items-end justify-between text-sm">
+														<p>
+															Quantity: {configuration["maximum quantity"]}
+														</p>
 
-										<div className="flex">
-											<button
-											type="button"
-											className="font-medium text-yellow-600 hover:text-yellow-500"
-											onClick={() => handleConfiguratorModal(configuration["__id"], configuration["_category id"])}
-											>
-											{
-												configuration?.type
-											}
-											</button>
-										</div>
+														</div>
+													</div>
+												</li>
+											</>	
+											))}
+											</ul>
+											<table className="w-[60%] divide-y divide-gray-300">
+												<thead>
+													<tr>
+														<th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 w-[80%]">
+															Item Name
+														</th>
+														<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+															Price
+														</th>
+													</tr>
+												</thead>
+												<tbody className="divide-y divide-gray-200">
+													{
+														selectedConfiguration != "" ?
+															categoryLoading ?
+															<>
+																<tr>
+																<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>Loading ...</td>
+																
+															</tr>
+															</>
+															:
+																categoryItems && categoryItems.length != 0 &&
+																	categoryItems.map((category)=>{
+																		return(
+																			<>
+																			<tr className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
+																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
+																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
+																			</tr>
+																			</>
+																		)
+																})
+														: <>
+															<tr>
+																<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>Please choose a category on the left first</td>
+																
+															</tr>
+														</>
+													}
+													
+													
+												</tbody>
+											</table>
 										</div>
 									</div>
-								</li>
-								<ControlledModal key={configuration["__id"]} title={configuration?.categoryData["display text"]} open={openConfigurator && selectedIndex == configuration["__id"]} setOpen={setOpenConfigurator} categoryItems={categoryItems}/>
-								</>
-								))}
-							</ul>
+								</div>
+							</div>
+
+
+							<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+								<div className="flex justify-between text-base font-medium text-gray-900">
+									<p>Subtotal</p>
+									<p>${item?.subtotal}.00</p>
+								</div>
+								<p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+								<div className="mt-6">
+									<a
+										href="#"
+										className="flex items-center justify-center rounded-md border border-transparent bg-yellow-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-700"
+									>
+										Save
+									</a>
+								</div>
+							</div>
 						</div>
+					</>
+					:
+					<>
+					<div className="mt-10">
+						<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+							<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+								<div className="mt-8">
+									<div className="flow-root">
+									<div class="animate-pulse space-x-4">
+											<div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6 mb-8">
+												<div className="sm:col-span-full">
+													<div class="h-2 bg-slate-700 rounded mt-10">
+													</div>
+													<div class="h-2 bg-slate-700 rounded mt-10">
+													</div>
+													<div class="h-2 bg-slate-700 rounded mt-10">
+													</div>
+													<div class="h-2 bg-slate-700 rounded mt-10">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					</div>
-					 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-						<div className="flex justify-between text-base font-medium text-gray-900">
-							<p>Subtotal</p>
-							<p>${item?.subtotal}.00</p>
-						</div>
-						<p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-						<div className="mt-6">
-							<a
-								href="#"
-								className="flex items-center justify-center rounded-md border border-transparent bg-yellow-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-700"
-							>
-								Save
-							</a>
-						</div>
-					</div>
-				</div>
+					</>
+					
+				}
 			</PanelSlide>
 		</>
-	)
-}
-
-const ControlledModal = ({title, open, setOpen, categoryItems}) => {
-	return(
-		<ConfiguratorsModal title={title} open={open} setOpen={setOpen}>
-			<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-				<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-					<div className="mt-8">
-						<div className="flow-root">
-							<ul role="list" className="-my-6 divide-y divide-gray-200">
-							{categoryItems?.map((item) => (
-								<>
-								<li className="flex py-6">
-									<div className="ml-4 flex flex-1 flex-col">
-										<div>
-										<div className="flex justify-between text-base font-medium text-gray-900">
-											<h3>
-												{item?.itemData?.name}
-											</h3>
-										</div>
-										
-										</div>
-										
-									</div>
-								</li>
-								</>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</ConfiguratorsModal>
 	)
 }

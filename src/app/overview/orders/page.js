@@ -20,7 +20,6 @@ export default function OrdersPage() {
             searchOrders(event.target.value);
         }
     }
-
     return (
         <>
             <div className="container xl:w-full">

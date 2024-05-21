@@ -3,6 +3,7 @@ import { base64Credetials } from "./credentials";
 
 export default async function handler(req, res) {
     const { id } = req.body;
+	console.log("category", id)
 	
     try {
       let response = await fetch(`${host}/horizon%20order/Configuration%20Option?$filter="_configuration id" eq '${id}'`, {

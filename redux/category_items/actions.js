@@ -1,4 +1,5 @@
 import { CATEGORY_ITEMS_FETCH_DATA_FAILURE, CATEGORY_ITEMS_FETCH_DATA_START, CATEGORY_ITEMS_FETCH_DATA_SUCCESS } from '../constants';
+import { fetchConfigurationOptions } from '../configurations/actions';
 
 export const fetchCategoryItems = (itemId) => {
     return async (dispatch) => {
@@ -17,6 +18,7 @@ export const fetchCategoryItems = (itemId) => {
           const { data } = await response.json();
 
           let items = await getItems(data);
+          console.log(items)
         
           dispatch({ type: CATEGORY_ITEMS_FETCH_DATA_SUCCESS, payload: items });
         } catch (error) {
@@ -44,6 +46,8 @@ const getItems = (data) => {
         delete data["@odata.editLink"];
         delete data["@odata.id"];
         delete data["@odata.context"];
+        const categories = fetchConfigurationOptions(data["_id"])
+        console.log("categories", categories)
         return {
           ...element,
           itemData: data

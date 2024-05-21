@@ -5,12 +5,11 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 export default function PanelSlide({open,
   setOpen,
   children,
-  withClose = true,
-  contentClassName = "",}) {
+}) {
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog className="relative z-10" onClose={setOpen}>
+    <Transition.Root onClick={() => setOpen(true)} show={open} as={Fragment}>
+      <Dialog className="relative z-10" onClose={setOpen} >
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -25,7 +24,7 @@ export default function PanelSlide({open,
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full ">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -35,7 +34,7 @@ export default function PanelSlide({open,
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-3xl">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
