@@ -24,6 +24,7 @@ export const fetchOrders = () => {
 					.then(({data}) => {
 						
 						let parsedSalesOrderItems = renameFields(data)
+						console.log(parsedSalesOrderItems)
 						if (process.env.NODE_ENV === "development") {
 							dispatch({ 
 								type: ORDERS_FETCH_DATA_SUCCESS,
@@ -32,7 +33,7 @@ export const fetchOrders = () => {
 						} else {
 							dispatch({ 
 								type: ORDERS_FETCH_DATA_SUCCESS,
-								payload: data
+								payload: parsedSalesOrderItems
 							});
 						}
 					})
