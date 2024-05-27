@@ -99,6 +99,7 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 																			<tr key={category["__id"]} className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
+																				{category.itemData["is configuration"]}
 																			</tr>
 																			</>
 																		)
@@ -118,7 +119,8 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 									</div>
 								</div>
 							</div>
-
+							
+							{/* Table to view existing order items in a sales order */}
 							<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
 								<table className="w-[100%] divide-y divide-gray-300">
 									<thead>
@@ -159,12 +161,12 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 																			</td>
 																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
 																				{
-																					`${subOrder.quantity}.00`
+																					`${subOrder.quantity}`
 																				}
 																			</td>
 																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
 																				{
-																					subOrder.price
+																					`$${subOrder.price}.00`
 																				}
 																			</td>
 																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
@@ -174,22 +176,22 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 																			</td>
 																		</tr>
 																		{
-																			subOrder.subOrders && subOrder.subOrders.length != 0 ?
+																			subOrder.subOrders && subOrder.subOrders.length != 0 &&
 																				subOrder.subOrders.map((subItem) => {
 																				return (
 																					<>
 																					<tr>
-																						<td className="whitespace-nowrap px-3 py-1 text-sm ml-8">
+																						<td className="whitespace-nowrap px-3 pr-1 pl-10 text-sm ml-8">
 																							{subItem.itemData.name}
 																						</td>
 																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
 																							{
-																								`${subItem.quantity}.00`
+																								`${subItem.quantity}`
 																							}
 																						</td>
 																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
 																							{
-																								subItem.price
+																								`$${subItem.price}.00`
 																							}
 																						</td>
 																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
@@ -201,12 +203,6 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 																					</>
 																					)
 																				})
-																				:
-																				<tr className="ml-6">
-																					<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>
-																						No selected items
-																					</td>
-																				</tr>
 																		}
 																		</>
 
