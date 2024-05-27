@@ -30,7 +30,7 @@ export default function MenuPage({params}) {
         }
     }
 
-    console.log(menu)
+    // console.log(menu)
     return (
         <>
             <div className="container xl:w-full">
@@ -76,107 +76,122 @@ export default function MenuPage({params}) {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200">
-                                            {menu.map((item) => (
-                                                <>
-                                                <tr 
-                                                    key={item["__id"]} 
-                                                >
-                                                    <td 
-                                                        className={`${item.itemData["is configuration"] == 1 && "cursor-pointer hover:text-yellow-700"} whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex justify-between w-[50%]`}
-                                                        onClick={()=> {
-                                                            handleSubOrders(item["__id"])
-                                                        }} 
-                                                    >
-                                                        <span>
-                                                            {item.itemData.name}
-                                                        </span>
-                                                        {
-                                                            item.itemData["is configuration"] === 1 &&
-                                                            <ChevronDownIcon className='h-6 w-6'/>
-                                                        }
-                                                        
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm">{item.quantity}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm"> ${item.price}.00</td>
-                                                    
-                                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex justify-around">
-                                                        { item.itemData["is configuration"] === 1 ? (
-                                                            <a  className='cursor-pointer hover:text-yellow-700' onClick={() => handleClick(item["__id"])}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
-                                                            </svg>
-                                                            <OrdersModal key={item?.itemData["__id"]} item={item.itemData["is configuration"] === 1 && item} open={open && selectedIndex == item["__id"]} setOpen={setOpen} index={selectedIndex}/>
+                                            {
+                                                !loading ?
+                                                    menu.map((item) => (
+                                                        <>
+                                                        <tr 
+                                                            key={item["__id"]} 
+                                                        >
+                                                            <td 
+                                                                className={`${item.itemData["is configuration"] == 1 && "cursor-pointer hover:text-yellow-700"} whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex justify-between w-[50%]`}
+                                                                onClick={()=> {
+                                                                    handleSubOrders(item["__id"])
+                                                                }} 
+                                                            >
+                                                                <span>
+                                                                    {item.itemData.name}
+                                                                </span>
+                                                                {
+                                                                    item.itemData["is configuration"] === 1 &&
+                                                                    <ChevronDownIcon className='h-6 w-6'/>
+                                                                }
+                                                                
+                                                            </td>
+                                                            <td className="whitespace-nowrap px-3 py-4 text-sm">{item.quantity}</td>
+                                                            <td className="whitespace-nowrap px-3 py-4 text-sm"> ${item.price}.00</td>
                                                             
-                                                        </a>
-                                                        
-                                                        )
-                                                    : <></>
-                                                    }
-                                                        <TrashIcon className='w-6 h-6 text-red-500'/>
-                                                    </td>
-                                                </tr>
-                                                {   
-                                                    showSubOrders.includes(item["__id"]) ?
-                                                        item.subOrders && item.subOrders.length != 0 &&
-                                                            item.subOrders.map((subitem) => {
-                                                                return (
-                                                                    <>
-                                                                    <tr 
-                                                                        key={subitem["__id"]}
-                                                                    >
-                                                                        <td 
-                                                                            className={`${subitem.itemData["is configuration"] == 1 && "cursor-pointer hover:text-yellow-700"} whitespace-nowrap py-4 pr-3 text-sm font-medium pl-6 flex justify-between w-[50%]`}
-                                                                            onClick={()=> {
-                                                                                handleSubOrders(subitem["__id"])
-                                                                            }}
-                                                                        >
-                                                                            <span>
-                                                                                {subitem.itemData.name}
-                                                                            </span>
-                                                                            {
-                                                                                subitem.itemData["is configuration"] === 1 &&
-                                                                                <ChevronDownIcon className='h-6 w-6'/>
-                                                                            }
-                                                                        </td>
-                                                                        <td className="whitespace-nowrap px-3 py-4 text-sm">{subitem.quantity}</td>
-                                                                        <td className="whitespace-nowrap px-3 py-4 text-sm"> ${subitem.price}.00</td>
-                                                                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                                                            {subitem.itemData["is configuration"] === 1 && (
-                                                                                <a  className='cursor-pointer hover:text-yellow-700' onClick={() => handleClick(subitem["__id"])}>
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
-                                                                                </svg>
-                                                                                <OrdersModal key={subitem?.itemData["__id"]} item={subitem.itemData["is configuration"] === 1 && subitem} open={open && selectedIndex == subitem["__id"]} setOpen={setOpen} index={selectedIndex}/>
-                                                                                
-                                                                            </a>
-                                                                            )}
-                                                                        </td>
-                                                                    </tr>
-                                                                        {
-                                                                            showSubOrders.includes(subitem["__id"]) ?
-                                                                                subitem.subOrders && subitem.subOrders.length != 0 &&
-                                                                                    subitem.subOrders.map((subitemOrder) => {
-                                                                                        return (
-                                                                                            <tr 
-                                                                                                key={subitemOrder["__id"]}
-                                                                                            >
-                                                                                                <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium pl-12 w-[50%]">{subitemOrder.itemData.name}</td>
-                                                                                                <td className="whitespace-nowrap px-3 py-4 text-sm">{subitemOrder.quantity}</td>
-                                                                                                <td className="whitespace-nowrap px-3 py-4 text-sm"> ${subitemOrder.price}.00</td>
-                                                                                                
-                                                                                            </tr>
-                                                                                        )
-                                                                                    })
-                                                                            : ""
-                                                                        }
-                                                                    </>
+                                                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex justify-around">
+                                                                { item.itemData["is configuration"] === 1 ? (
+                                                                    <a  className='cursor-pointer hover:text-yellow-700' onClick={() => handleClick(item["__id"])}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
+                                                                    </svg>
+                                                                    <OrdersModal key={item["__id"]} item={item.itemData["is configuration"] === 1 && item} open={open && selectedIndex == item["__id"]} setOpen={setOpen} index={selectedIndex}/>
                                                                     
+                                                                </a>
+                                                                
                                                                 )
-                                                            })
-                                                    : ""
-                                                }
-                                                </>
-                                            ))}
+                                                            : <></>
+                                                            }
+                                                                <TrashIcon className='w-6 h-6 text-red-500'/>
+                                                            </td>
+                                                        </tr>
+                                                        {   
+                                                            showSubOrders.includes(item["__id"]) ?
+                                                                item.subOrders && item.subOrders.length != 0 &&
+                                                                    item.subOrders.map((subitem) => {
+                                                                        return (
+                                                                            <>
+                                                                            <tr 
+                                                                                key={subitem["__id"]}
+                                                                            >
+                                                                                <td 
+                                                                                    className={`${subitem.itemData["is configuration"] == 1 && "cursor-pointer hover:text-yellow-700"} whitespace-nowrap py-4 pr-3 text-sm font-medium pl-6 flex justify-between w-[50%]`}
+                                                                                    onClick={()=> {
+                                                                                        handleSubOrders(subitem["__id"])
+                                                                                    }}
+                                                                                >
+                                                                                    <span>
+                                                                                        {subitem.itemData.name}
+                                                                                    </span>
+                                                                                    {
+                                                                                        subitem.itemData["is configuration"] === 1 &&
+                                                                                        <ChevronDownIcon className='h-6 w-6'/>
+                                                                                    }
+                                                                                </td>
+                                                                                <td className="whitespace-nowrap px-3 py-4 text-sm">{subitem.quantity}</td>
+                                                                                <td className="whitespace-nowrap px-3 py-4 text-sm"> ${subitem.price}.00</td>
+                                                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                                                                    {subitem.itemData["is configuration"] === 1 && (
+                                                                                        <a  className='cursor-pointer hover:text-yellow-700' onClick={() => handleClick(subitem["__id"])}>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
+                                                                                        </svg>
+                                                                                        <OrdersModal key={subitem?.itemData["__id"]} item={subitem.itemData["is configuration"] === 1 && subitem} open={open && selectedIndex == subitem["__id"]} setOpen={setOpen} index={selectedIndex}/>
+                                                                                        
+                                                                                    </a>
+                                                                                    )}
+                                                                                </td>
+                                                                            </tr>
+                                                                                {
+                                                                                    showSubOrders.includes(subitem["__id"]) ?
+                                                                                        subitem.subOrders && subitem.subOrders.length != 0 &&
+                                                                                            subitem.subOrders.map((subitemOrder) => {
+                                                                                                return (
+                                                                                                    <tr 
+                                                                                                        key={subitemOrder["__id"]}
+                                                                                                    >
+                                                                                                        <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium pl-12 w-[50%]">{subitemOrder.itemData.name}</td>
+                                                                                                        <td className="whitespace-nowrap px-3 py-4 text-sm">{subitemOrder.quantity}</td>
+                                                                                                        <td className="whitespace-nowrap px-3 py-4 text-sm"> ${subitemOrder.price}.00</td>
+                                                                                                        
+                                                                                                    </tr>
+                                                                                                )
+                                                                                            })
+                                                                                    : ""
+                                                                                }
+                                                                            </>
+                                                                            
+                                                                        )
+                                                                    })
+                                                            : ""
+                                                        }
+                                                        </>
+                                                    ))
+                                                    :
+                                                    <>
+                                                        <tr 
+                                                        >
+                                                            <td 
+                                                                className={`whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 text-center`}
+                                                                colSpan={4}
+                                                            >
+                                                               Loading ...
+                                                            </td>
+                                                        </tr>
+                                                    </>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>

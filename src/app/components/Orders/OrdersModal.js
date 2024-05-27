@@ -1,11 +1,9 @@
 
-import PanelSlide from "../common/Modal/PanelSlide";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchConfigurationOptions } from "../../../../redux/configurations/actions";
-import { fetchCategoryItems } from "../../../../redux/category_items/actions";
 import { useEffect, useState } from "react";
-import { ConfiguratorsModal } from "../Configurators/ConfiguratorsModal";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategoryItems } from "../../../../redux/category_items/actions";
+import { fetchConfigurationOptions } from "../../../../redux/configurations/actions";
+import PanelSlide from "../common/Modal/PanelSlide";
 
 export const OrdersModal = ({item, open, setOpen, index}) => {
 	
@@ -25,7 +23,8 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 		setSelectedConfiguration(id)
 		dispatch(fetchCategoryItems(categoryId))
 	}
-	
+
+	console.log(item)
 	return(
 		<>
 			<PanelSlide open={open} setOpen={setOpen}>
@@ -41,7 +40,7 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 								<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
 									<div className="mt-8">
 										<div className="flex justify-between">
-											<ul role="list" className="w-[30%] divide-y divide-gray-200">
+											<ul key={item["__id"]} role="list" className="w-[30%] divide-y divide-gray-200">
 											{configurations?.map((configuration) => (
 											<>
 												<li 
@@ -97,7 +96,7 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 																	categoryItems.map((category)=>{
 																		return(
 																			<>
-																			<tr className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
+																			<tr key={category["__id"]} className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
 																			</tr>
@@ -118,6 +117,110 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 										</div>
 									</div>
 								</div>
+							</div>
+
+							<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+								<table className="w-[100%] divide-y divide-gray-300">
+									<thead>
+										<tr>
+											<th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 w-[40%]">
+												Selected item name
+											</th>
+											<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+												Quantity
+											</th>
+											<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+												Price
+											</th>
+											<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+												Total cost
+											</th>
+										</tr>
+									</thead>
+									<tbody className="divide-y divide-gray-200">
+										
+										{
+											configurations.map((configuration, index) => {
+												return (
+													selectedConfiguration != "" && selectedConfiguration == configuration["__id"] &&
+													<>
+														
+															{
+																item.subOrders.length != 0 && item.subOrders.length > 0 &&
+																item.subOrders.map((subOrder) => {
+																	return(
+																		<>
+																		
+																		<tr key={subOrder["__id"]}>
+																			<td className="whitespace-nowrap px-3 py-1.5 text-sm" >
+																				{
+																					subOrder.itemData.name
+																				}
+																			</td>
+																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																				{
+																					`${subOrder.quantity}.00`
+																				}
+																			</td>
+																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																				{
+																					subOrder.price
+																				}
+																			</td>
+																			<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																				{
+																					subOrder.subtotal
+																				}
+																			</td>
+																		</tr>
+																		{
+																			subOrder.subOrders && subOrder.subOrders.length != 0 ?
+																				subOrder.subOrders.map((subItem) => {
+																				return (
+																					<>
+																					<tr>
+																						<td className="whitespace-nowrap px-3 py-1 text-sm ml-8">
+																							{subItem.itemData.name}
+																						</td>
+																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																							{
+																								`${subItem.quantity}.00`
+																							}
+																						</td>
+																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																							{
+																								subItem.price
+																							}
+																						</td>
+																						<td className="whitespace-nowrap px-3 py-4 text-sm" >
+																							{
+																								subItem.subtotal
+																							}
+																						</td>
+																					</tr>
+																					</>
+																					)
+																				})
+																				:
+																				<tr className="ml-6">
+																					<td className="whitespace-nowrap px-3 py-4 text-sm" colSpan={2}>
+																						No selected items
+																					</td>
+																				</tr>
+																		}
+																		</>
+
+																	)
+																})
+															}
+													
+													</>
+												)
+											})
+										}
+										
+									</tbody>
+								</table>
 							</div>
 
 
