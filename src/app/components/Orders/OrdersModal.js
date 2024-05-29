@@ -9,6 +9,10 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 	
 	let configurationId = item?.itemData["__id"];
 	const [selectedConfiguration, setSelectedConfiguration] = useState("")
+	const [subConfiguration, setSubConfiguration] = useState()
+	const [selectedSubConfiguration, setSelectedSubConfiguration] = useState(false)
+	const [selectedSubCategory, setSelectedSubCategory] = useState()
+	const [selectedItem, setSelectedItem] = useState(item)
 
 	const { configurations, loading } = useSelector((state) => state.configurationsReducer);
 	const {categoryItems, loading: categoryLoading} = useSelector((state) => state.categoryItemsReducer);
@@ -22,9 +26,15 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 	const handleConfiguratorModal = (id, categoryId) => {
 		setSelectedConfiguration(id)
 		dispatch(fetchCategoryItems(categoryId))
+		setSubConfiguration()
+		setSelectedSubConfiguration(false)
 	}
 
-	console.log(item)
+	const handleRecursiveTable = (index, category) => {
+		let { itemData } = category
+		setSubConfiguration(itemData)
+		setSelectedSubConfiguration(true)
+	}
 	return(
 		<>
 			<PanelSlide open={open} setOpen={setOpen}>
@@ -40,7 +50,8 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 								<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
 									<div className="mt-8">
 										<div className="flex justify-between">
-											<ul key={item["__id"]} role="list" className="w-[30%] divide-y divide-gray-200">
+											<ul key={index} role="list" className="w-[30%] divide-y divide-gray-200">
+											{/* Parent Configurations */}
 											{configurations?.map((configuration) => (
 											<>
 												<li 
@@ -93,13 +104,24 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 															</>
 															:
 																categoryItems && categoryItems.length != 0 &&
-																	categoryItems.map((category)=>{
+																	categoryItems.map((category, index)=>{
 																		return(
 																			<>
-																			<tr key={category["__id"]} className={`${category.itemData["is configuration"] == 1 ? "hover:bg-gray-50 hover:text-yellow-600 cursor-pointer" : ""}`}>
+																			<tr 
+																				key={category["__id"]} 
+																				className={`${selectedSubConfiguration && "text-yellow-600 bg-gray-50"} hover:bg-gray-50 hover:text-yellow-600 cursor-pointer`}
+																				onClick={() => {
+																					if(category.itemData["is configuration"] == 1){
+
+																						handleRecursiveTable(index, category)
+																					} else {
+																						console.log(category)
+																					}
+																					
+																				}}
+																			>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
 																				<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
-																				{category.itemData["is configuration"]}
 																			</tr>
 																			</>
 																		)
@@ -120,6 +142,93 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 								</div>
 							</div>
 							
+							{/* Sub Configuration */}
+							{
+								subConfiguration && subConfiguration.length !=0  && selectedSubConfiguration && 
+								<>
+								<div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl border-t-2 mt-8">
+								<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+									<div className="mt-8">
+										<div className="flex justify-between">
+											<ul role="list" className="w-[30%] divide-y divide-gray-200">
+											{/* Sub configuration */}
+											{subConfiguration?.categoryData?.map((configuration) => (
+												<>
+													<li 
+														key={configuration["__id"]} 
+														className={`${ (selectedSubCategory && selectedSubCategory[0]["_category id"] ) == configuration["_category id"] && "text-yellow-600 bg-gray-50" } flex cursor-pointer py-4 text-gray-900 rounded-xl hover:bg-gray-50 hover:text-yellow-600`}
+														onClick={() => {
+															setSelectedSubCategory(configuration?.itemData)
+														}}
+													>
+														<div className="ml-4 flex flex-1 flex-col">
+															<div>
+															<div className="flex justify-between text-base font-medium ">
+																<h3>
+																	{configuration?.categoryData?.name}
+																</h3>
+															</div>
+															
+															</div>
+															<div className="flex flex-1 items-end justify-between text-sm">
+															<p>
+																Quantity: {configuration["maximum quantity"]}
+															</p>
+
+															</div>
+														</div>
+													</li>
+												</>	
+											)
+											)}
+											</ul>
+											<table className="w-[60%] divide-y divide-gray-300">
+												<thead>
+													<tr>
+														<th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 w-[80%]">
+															Item Name
+														</th>
+														<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[20%]">
+															Price
+														</th>
+													</tr>
+												</thead>
+												<tbody className="divide-y divide-gray-200">
+													{
+														selectedSubCategory &&
+															selectedSubCategory.map((category, index) => {
+																	return(
+																		<>
+																		<tr 
+																			key={category["__id"]} 
+																			className={`hover:bg-gray-50 hover:text-yellow-600 cursor-pointer`}
+																			onClick={() => {
+																				
+																				// handleRecursiveTable(index, category)
+																				
+																			}}
+																		>
+																			<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.name}</td>
+																			<td className="rounded-xl whitespace-nowrap px-3 py-4 text-sm">{category?.itemData?.price || "$0.00"}</td>
+																		</tr>
+																		</>
+																	)
+															})
+													}
+													
+													
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+								
+								
+								</>
+								
+							}
+				
 							{/* Table to view existing order items in a sales order */}
 							<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
 								<table className="w-[100%] divide-y divide-gray-300">
@@ -149,10 +258,10 @@ export const OrdersModal = ({item, open, setOpen, index}) => {
 														
 															{
 																item.subOrders.length != 0 && item.subOrders.length > 0 &&
-																item.subOrders.map((subOrder) => {
+																item.subOrders.map((subOrder, subIndex) => {
+																	
 																	return(
 																		<>
-																		
 																		<tr key={subOrder["__id"]}>
 																			<td className="whitespace-nowrap px-3 py-1.5 text-sm" >
 																				{

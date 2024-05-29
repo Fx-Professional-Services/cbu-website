@@ -17,7 +17,11 @@ export const fetchMenu = (itemId) => {
           const { data } = await response.json();
 
           let orderItems  = await getItems(data);
-          const result = getParentChildOrderItems(orderItems);
+          const parentChildItems = getParentChildOrderItems(orderItems);
+          const result = {
+            data: parentChildItems,
+            rawData: orderItems
+          }
 
           dispatch({ type: MENU_FETCH_DATA_SUCCESS, payload: result });
         } catch (error) {
