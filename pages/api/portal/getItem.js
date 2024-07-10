@@ -3,7 +3,6 @@ import { base64Credetials } from "./credentials";
 
 export default async function handler(req, res) {
     const { itemId } = req.body;
-
     try {
       let response = await fetch(`${host}/horizon%20order/Item('${itemId}')`, {
         method: "GET",
@@ -16,7 +15,6 @@ export default async function handler(req, res) {
      if (response.status == 401) {
       res.status(401).json({ message: response.statusText });
     } else {
-     
       const data = await response.json();
       res.status(200).json({ data: data});
     }

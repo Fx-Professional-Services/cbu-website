@@ -1,4 +1,4 @@
-import { ORDERS_FETCH_DATA_FAILURE, ORDERS_FETCH_DATA_START, ORDERS_FETCH_DATA_SUCCESS } from '../constants';
+import { UPDATE_ORDERS_FETCH_DATA_FAILURE, UPDATE_ORDERS_FETCH_DATA_START, UPDATE_ORDERS_FETCH_DATA_SUCCESS } from '../constants';
 
 const user =
     typeof window !== "undefined" ? localStorage.getItem("uid") : null;
@@ -7,44 +7,45 @@ if (typeof window !== "undefined") {
     token_order = window.localStorage.getItem("token_order");
 }
 
-export const fetchOrders = () => {
+export const updateOrderItem = (id, itemId) => {
     return async (dispatch) => {
-        dispatch({ type: ORDERS_FETCH_DATA_START });
+        dispatch({ type: UPDATE_ORDERS_FETCH_DATA_START });
 
-        await fetch(`/api/portal/getsalesorders`, {
-					method: "POST",
+        await fetch(`/api/portal/updateSalesOrderItem`, {
+					method: "PATCH",
 					headers: {
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({
-						user: user
+						id: id,
+						itemId: itemId
 					})
 				})
 					.then((response) => response.json())
 					.then(({data}) => {
 						
 						let parsedSalesOrderItems = renameFields(data)
-						console.log(data)
+						console.log(parsedSalesOrderItems)
 
 						if (process.env.NODE_ENV === "development") {
 							dispatch({ 
-								type: ORDERS_FETCH_DATA_SUCCESS,
+								type: UPDATE_ORDERS_FETCH_DATA_SUCCESS,
 								payload: Array.from(new Set(parsedSalesOrderItems.map(JSON.stringify))).map(JSON.parse)
 							});
 						} else {
 							dispatch({ 
-								type: ORDERS_FETCH_DATA_SUCCESS,
+								type: UPDATE_ORDERS_FETCH_DATA_SUCCESS,
 								payload: parsedSalesOrderItems
 							});
 						}
 					})
-					.catch((error) =>  dispatch({ type: ORDERS_FETCH_DATA_FAILURE }));
+					.catch((error) =>  dispatch({ type: UPDATE_ORDERS_FETCH_DATA_FAILURE }));
     };
 };
 
 export const searchOrders = (keyword) => {
 	return async (dispatch) => {
-        dispatch({ type: ORDERS_FETCH_DATA_START });
+        dispatch({ type: UPDATE_ORDERS_FETCH_DATA_START });
 
         await fetch(`/api/portal/getsalesorders`, {
 					method: "POST",
@@ -62,17 +63,17 @@ export const searchOrders = (keyword) => {
 
 						if (process.env.NODE_ENV === "development") {
 							dispatch({ 
-								type: ORDERS_FETCH_DATA_SUCCESS,
+								type: UPDATE_ORDERS_FETCH_DATA_SUCCESS,
 								payload: Array.from(new Set(newOrderItems.map(JSON.stringify))).map(JSON.parse)
 							});
 						} else {
 							dispatch({ 
-								type: ORDERS_FETCH_DATA_SUCCESS,
+								type: UPDATE_ORDERS_FETCH_DATA_SUCCESS,
 								payload: newOrderItems
 							});
 						}
 					})
-					.catch((error) =>  dispatch({ type: ORDERS_FETCH_DATA_FAILURE }));
+					.catch((error) =>  dispatch({ type: UPDATE_ORDERS_FETCH_DATA_FAILURE }));
     };
 };
 

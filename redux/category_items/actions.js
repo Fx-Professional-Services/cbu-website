@@ -1,5 +1,5 @@
 import { CATEGORY_ITEMS_FETCH_DATA_FAILURE, CATEGORY_ITEMS_FETCH_DATA_START, CATEGORY_ITEMS_FETCH_DATA_SUCCESS } from '../constants';
-import { getCategories, getItems, getConfigurationOptions, getCategoryItems} from '../utils';
+import { getCategories, getItems, getConfigurationOptions, getCategoryItems, parseObject} from '../utils';
 
 export const fetchCategoryItems = (itemId) => {
   return async (dispatch) => {
@@ -16,7 +16,13 @@ export const fetchCategoryItems = (itemId) => {
         })
       });
       const { data } = await response.json();
-      let items = await getItems(data)
+      const requiredFields = [
+        "_item id",
+        "_category id",
+        "key ingredient"
+      ];
+      const categoryItems = parseObject(data, requiredFields);
+
       let recursiveItems = await getConfigurationData(data)
       console.log(recursiveItems)
       
@@ -36,7 +42,9 @@ async function getConfigurationData (data) {
     if(item.itemData["is configuration"]){
 
       let configurationOption = await getConfigurationOptions(item.itemData["__id"])
+      
       let categories = await getCategories(configurationOption);
+
       let categoryItems = await Promise.all(categories.map(async(category) => {
           let categoryItem = await getCategoryItems(category["_category id"])
         
