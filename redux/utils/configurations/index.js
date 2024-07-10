@@ -1,4 +1,5 @@
-export const getConfigurationOptions = async (itemId) => {
+import { parseObject } from "../objectParser";
+export const getConfigurationOptions = async (itemId, configField) => {
 	try {
 		const response = await fetch(`/api/portal/getConfiguratorOptions`, {
 			method: "POST",
@@ -7,11 +8,23 @@ export const getConfigurationOptions = async (itemId) => {
 			},
 			body: JSON.stringify({
 			  id: itemId,
+			  field: configField
 			})
 		});
 		const { data } = await response.json();
-	  
-		return data;
+		const requiredFields = [
+			"_configuration id",
+			"_category id",
+			"type",
+			"ITEM ID G",
+			"selections",
+			"maximum quantity",
+			"minimum quantity",
+		]
+	    const parsedData = parseObject(data, requiredFields)
+
+		return parsedData;
+
 	  } catch (error) {
 		  console.log(error);
 	  }

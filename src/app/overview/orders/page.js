@@ -20,7 +20,6 @@ export default function OrdersPage() {
             searchOrders(event.target.value);
         }
     }
-    // console.log(orders)
     return (
         <>
             <div className="container xl:w-full">
@@ -36,14 +35,14 @@ export default function OrdersPage() {
                                     A list of all the orders in your account including their id, total price, transaction date, etc.
                                 </p>
                             </div>
-                            {/* <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                            <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                                 <button
                                     type="button"
                                     className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                                 >
                                     Add Order
                                 </button>
-                            </div> */}
+                            </div>
                              <div className="relative mt-2 rounded-md shadow-sm ms-4">
                                 <input
                                     type="text"

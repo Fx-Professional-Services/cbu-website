@@ -1,3 +1,4 @@
+import { parseObject } from "../objectParser";
 export const getCategoryItems = async (itemId) => {
 	try {
 		const response = await fetch(`/api/portal/getCategoryItems`, {
@@ -10,10 +11,13 @@ export const getCategoryItems = async (itemId) => {
 			})
 		});
 		const { data } = await response.json();
-		// console.log("getcatitem", data)
-		return data
+		const requiredFields = [
+			"_item id",
+			"_category id",
+		]
+		const parsedData = parseObject(data, requiredFields)
+		return parsedData
 	} catch (error) {
-		dispatch({ type: CATEGORY_ITEMS_FETCH_DATA_FAILURE });
 		console.log(error);
 	}
 };

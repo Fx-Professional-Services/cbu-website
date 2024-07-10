@@ -1,4 +1,5 @@
 import { MENU_FETCH_DATA_FAILURE, MENU_FETCH_DATA_START, MENU_FETCH_DATA_SUCCESS } from '../constants';
+import { getItems, parseObject } from '../utils';
 
 export const fetchMenu = (itemId) => {
     return async (dispatch) => {
@@ -15,17 +16,92 @@ export const fetchMenu = (itemId) => {
               })
           });
           const { data } = await response.json();
+          // console.log(data)
 
-          let orderItems  = await getItems(data);
+          const requiredFields = [
+            "description",
+            "item type",
+            "_order id",
+            "price",
+            "quantity",
+            "subtotal",
+            "_channel id",
+            "_customer tier id",
+            "_item id",
+            "_party id",
+            "_parent order item id",
+            "_configuration option item id",
+            "summary subtotal with tax",
+            "summary subtotal",
+            "is hidden order",
+            "is confirmed",
+            "is invoiced",
+            "is price hidden",
+            "is quantity hidden"
+          ]
+
+          const unHiddenSalesOrderItems = data?.filter((el) => el["is hidden order"] != 1)
+          const parsedData = await parseObject(unHiddenSalesOrderItems, requiredFields);
+          // console.log(parsedData)
+        
+          // let itemDetails = await Promise.all(parsedData.map(async(el) => {
+          //   try {
+          //     let configId = el["_configuration option item id"] && el["_configuration option item id"] != null ? el["_configuration option item id"] : el["_item id"];
+          //     let configField = el["_configuration option item id"] && el["_configuration option item id"] != null ? "_configuration option item id" : "_configuration id";
+
+          //     let configOptions = await getConfigurationOptions(configId, configField)
+          //     let itemCategory = []
+
+          //     if(Array.isArray(configOptions) && configOptions.length != 0){
+          //       itemCategory =  await Promise.all(configOptions.map(async(config) => {
+          //         let category = await getCategoryItems(config["_category id"])
+          //         return {
+          //           ...config,
+          //           category: category
+          //         }
+          //       }))
+          //       console.log(itemCategory)
+          //     }
+          //     // await Promise.all(configOptions.map(async(config) => {
+          //     //   let category = await getCategoryItems(config["_category id"])
+          //     //   return {
+          //     //     ...config,
+          //     //     category: category
+          //     //   }
+          //     // }))
+          //     // console.log(itemCategory, configOptions, configId)
+          //     return {
+          //           ...el,
+          //           itemData: configOptions
+          //       }
+          //     } catch (error) {
+          //       console.log(error)
+          //     }
+          //   }))
+  
+          let orderItems = await Promise.all(parsedData.map(async(el) => {
+              try {
+                let item = await getItems(el["_item id"])
+                return {
+                    ...el,
+                    itemData: item
+                }
+              } catch (error) {
+                console.log(error)
+              }
+          }))
+
           const parentChildItems = getParentChildOrderItems(orderItems);
+
           const result = {
             data: parentChildItems,
             rawData: orderItems
           }
+         
 
           dispatch({ type: MENU_FETCH_DATA_SUCCESS, payload: result });
         } catch (error) {
-            dispatch({ type: MENU_FETCH_DATA_FAILURE });
+            dispatch({ type: MENU_FETCH_DATA_FAILURE, payload: error });
             console.log(error);
         }
     };
@@ -52,41 +128,4 @@ const getParentChildOrderItems = (orders) => {
   });
   
   return rootOrders;
-}
-
-  const getItems = (data) => {
-    let fetchPromises = data.map(element => {
-        return fetch(`/api/portal/getItem`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                itemId: element["_item id"],
-            })
-        })
-        .then(response => response.json())
-        .then(({ data }) => {
-          delete element["@odata.editLink"];
-          delete element["@odata.id"];
-          delete data["@odata.editLink"];
-          delete data["@odata.id"];
-          delete data["@odata.context"];
-            
-          return {
-            ...element,
-            itemData: data
-          }
-        })
-        .catch(error => {
-            console.log(error);
-            return null; // handle error gracefully
-        });
-    });
-
-    return Promise.all(fetchPromises)
-        .then(items => {
-            // console.log(items); // check the fetched items
-            return items.filter(item => item !== null); // remove null items if needed
-        });
 }
