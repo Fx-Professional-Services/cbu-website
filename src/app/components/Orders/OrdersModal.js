@@ -82,33 +82,6 @@ export const OrdersModal = ({item, open, setOpen, index, setIsReload}) => {
 	async function handleFetchSubConfigurations(configurationOptionItemId) {
 		dispatch(fetchSubConfigurationOptions(configurationOptionItemId, "_configuration option item id"));
 	}
-
-	// const handleConfiguratorModal = (configuration, currentConfigurations, orderItem) => { 
-	// 	setSelectedConfiguration(configuration)
-	// 	setSelectedOrderConfiguration(orderItem)
-	// 	setUpdatedConfigurations((curr) => {
-	// 			const exists = curr.some((item) => item.id === currentConfigurations);
-    
-	// 			if (exists) {
-	// 				// If the ID exists, remove it from the array
-	// 				return curr.filter((item) => item.id !== currentConfigurations);
-	// 			} else {
-	// 				// If the ID does not exist, add the new configuration
-	// 				return [
-	// 					...curr,
-	// 					{
-	// 						id: currentConfigurations
-	// 					}
-	// 				];
-	// 			}
-	// 		} 
-	// 	)
-	// 	if((selectedSubCategoryConfiguration && selectedSubCategoryConfiguration.length != 0) && (selectedSubCategoryItem && selectedSubCategoryItem.length != 0)) {
-	// 		setSelectedSubCategoryConfiguration([])
-	// 		setSelectedSubCategoryItem([])
-	// 	}
-	// }
-
 	function handleUpdateSingleOrderItem (orderId, itemId){
 		console.log("orderId", orderId)
 		console.log("itemId", itemId)

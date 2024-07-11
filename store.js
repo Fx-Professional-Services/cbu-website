@@ -6,8 +6,11 @@ import faqsReducer from './redux/faqs/reducer';
 import invoicesReducer from './redux/invoices/reducer';
 import menuReducer from './redux/menu/reducer';
 import ordersReducer from './redux/orders/reducer';
+import salesItemsReducer from './redux/sales_items/reducer';
 import subConfigurationsReducer from './redux/subConfigurations/reducer';
 import updateOrderItemReducer from './redux/update_order_item/reducer';
+import itemsReducer from './redux/items/reducer';
+import salesOrdersReducer from './redux/sales_orders/reducer';
 
 export const store = configureStore({
     reducer: {
@@ -20,5 +23,8 @@ export const store = configureStore({
         categoryItemsReducer: categoryItemsReducer,
         subConfigurationsReducer: subConfigurationsReducer,
         updateOrderItemReducer: updateOrderItemReducer,
+        salesItemsReducer: salesItemsReducer,
+        itemsReducer: itemsReducer,
+        salesOrdersReducer: salesOrdersReducer
     },
 });

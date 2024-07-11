@@ -3,7 +3,7 @@ import { base64Credetials } from "./credentials";
 
 export default async function handler(req, res) {
     try {
-      let response = await fetch(`${host}/horizon%20order/Item`, {
+      let response = await fetch(`${host}/horizon%20order/Item?$filter="is sales item" eq 1`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
