@@ -32,6 +32,7 @@ export default async function signIn(req, res) {
         const token_order = await SessionOrder(req, res);
         const token_accounting = await SessionAccounting(req, res);
         res.setHeader("Cache-Control", "s-maxage=900")
+    
         res.status(200).json({
             message: {
                 username: data.response.data[0].fieldData["Party::display name"],

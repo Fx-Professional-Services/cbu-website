@@ -5,6 +5,7 @@ import { ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMenu } from '../../../../../redux/menu/actions';
+import Link from 'next/link';
 
 export default function MenuPage({params}) {
     const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function MenuPage({params}) {
         }
     }
 
-    // console.log(menu)
+
 
     return (
         <>
@@ -44,12 +45,12 @@ export default function MenuPage({params}) {
                                 </p>
                             </div>
                             <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                                <button
-                                    type="button"
+                                <Link
+                                  href={`/overview/orders/${params.menu}/items`}
                                     className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                                 >
                                     Add Item
-                                </button>
+                                </Link>
                             </div>
                         </div>
                         <div className="mt-8 flow-root">
