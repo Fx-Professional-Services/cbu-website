@@ -13,8 +13,6 @@ export const fetchSalesItems = () => {
               }
             });
             const { data } = await response.json();
-            
-  
 
             const requiredFields = [
                 "name",

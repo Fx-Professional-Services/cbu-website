@@ -11,6 +11,11 @@ import subConfigurationsReducer from './redux/subConfigurations/reducer';
 import updateOrderItemReducer from './redux/update_order_item/reducer';
 import itemsReducer from './redux/items/reducer';
 import salesOrdersReducer from './redux/sales_orders/reducer';
+import singleSalesOrderReducer from './redux/sales_order/reducer';
+import createSalesOrderItemReducer from './redux/create_sales_order_item/reducer';
+import deleteSalesOrderItemReducer from './redux/delete_sales_order_item/reducer';
+import getSalesOrderItemReducer from './redux/get_sales_order_item/reducer';
+
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +30,10 @@ export const store = configureStore({
         updateOrderItemReducer: updateOrderItemReducer,
         salesItemsReducer: salesItemsReducer,
         itemsReducer: itemsReducer,
-        salesOrdersReducer: salesOrdersReducer
+        salesOrdersReducer: salesOrdersReducer,
+        singleSalesOrderReducer: singleSalesOrderReducer,
+        createSalesOrderItemReducer: createSalesOrderItemReducer,
+        deleteSalesOrderItemReducer: deleteSalesOrderItemReducer,
+        getSalesOrderItemReducer: getSalesOrderItemReducer,
     },
 });

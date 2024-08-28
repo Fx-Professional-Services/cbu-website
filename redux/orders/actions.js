@@ -24,7 +24,6 @@ export const fetchOrders = () => {
 					.then(({data}) => {
 						
 						let parsedSalesOrderItems = renameFields(data)
-						console.log(data)
 
 						if (process.env.NODE_ENV === "development") {
 							dispatch({ 
