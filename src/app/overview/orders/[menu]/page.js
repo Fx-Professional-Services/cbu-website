@@ -1,14 +1,14 @@
 "use client";
 
+import ItemsModal from '@/app/components/AddItem/ItemsModal';
 import { ConfirmationDialog } from '@/app/components/Orders/ConfirmationDialog';
 import { OrdersModal } from '@/app/components/Orders/OrdersModal';
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenu } from '../../../../../redux/menu/actions';
-import { fetchSalesOrderItem } from '../../../../../redux/get_sales_order_item/actions';
 import { deleteSalesOrderItem } from '../../../../../redux/delete_sales_order_item/actions';
+import { fetchSalesOrderItem } from '../../../../../redux/get_sales_order_item/actions';
+import { fetchMenu } from '../../../../../redux/menu/actions';
 
 export default function MenuPage({params}) {
     const dispatch = useDispatch();
@@ -26,8 +26,17 @@ export default function MenuPage({params}) {
     const [deleteSalesOrderItemId, setDeleteSalesOrderItemId] = useState(null)
     const [deleteSalesOrderItemName, setDeleteSalesOrderItemName] = useState(null)
 
+    //Add items modal
+    const [openItems, setOpenItems] = useState(false)
+
     useEffect(() => {
         dispatch(fetchMenu(params.menu));
+    }, [isReload]);
+
+    useEffect(() => {
+       if(isReload) {
+            setIsReload(false)
+       }
     }, [isReload]);
 
     const handleSubOrders = (orderId) => {
@@ -37,8 +46,6 @@ export default function MenuPage({params}) {
             setShowSubOrders([orderId, ...showSubOrders])
         }
     }
-
-    console.log(menu)
 
     const handleDeleteSalesOrderItem = (salesOrderId) => {
         dispatch(deleteSalesOrderItem(salesOrderId))
@@ -82,12 +89,21 @@ export default function MenuPage({params}) {
                                 </p>
                             </div>
                             <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                                <Link
+                                {/* <Link
                                   href={`/overview/orders/${params.menu}/items`}
                                     className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                                 >
                                     Add Item
-                                </Link>
+                                </Link> */}
+                                 <button
+                                    type="button"
+                                    className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                                    onClick={() => {
+                                        setOpenItems(true)
+                                    }}
+                                >
+                                    Add sales item
+                                </button>
                             </div>
                         </div>
                         <div className="mt-8 flow-root">
@@ -328,7 +344,11 @@ export default function MenuPage({params}) {
                         </div>
                     </div>
                 </div>
+            {/* Add Items */}
+            <ItemsModal openItems={openItems} setOpenItems={setOpenItems} params={params.menu} setIsReload={setIsReload} /> 
             </div>
+
+
         </>
     );
 }

@@ -43,7 +43,7 @@ export const createSalesOrderItem = (
 				})
 				const { data } = await response.json();
 				let item = await fetchItem(data["_item id"])
-				console.log(data)
+				// console.log(data)
 				
 				dispatch({ 
 					type: CREATE_SALES_ORDER_ITEM_FETCH_DATA_SUCCESS,
