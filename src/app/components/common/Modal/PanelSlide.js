@@ -1,6 +1,6 @@
-import { PropsWithChildren, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment } from 'react'
 
 export default function PanelSlide({open,
   setOpen,
@@ -10,6 +10,10 @@ export default function PanelSlide({open,
   return (
     <Transition.Root onClick={() => setOpen(true)} show={open} as={Fragment}>
       <Dialog className="relative z-10" onClose={setOpen} >
+      <Dialog.Backdrop
+					transition
+					className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out"
+				/>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"

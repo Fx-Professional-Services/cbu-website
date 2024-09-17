@@ -1,23 +1,43 @@
 "use client";
 
+import ItemsModal from '@/app/components/AddItem/ItemsModal';
+import { ConfirmationDialog } from '@/app/components/Orders/ConfirmationDialog';
 import { OrdersModal } from '@/app/components/Orders/OrdersModal';
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteSalesOrderItem } from '../../../../../redux/delete_sales_order_item/actions';
+import { fetchSalesOrderItem } from '../../../../../redux/get_sales_order_item/actions';
 import { fetchMenu } from '../../../../../redux/menu/actions';
-import Link from 'next/link';
 
 export default function MenuPage({params}) {
+    const dispatch = useDispatch();
+    const { menu, loading } = useSelector((state) => state.menuReducer);
+    const { salesOrderItem, loading: salesOrderItemLoading } = useSelector((state) => state.getSalesOrderItemReducer);
+    const { deleted, loading: deleteLoading} = useSelector((state) => state.deleteSalesOrderItemReducer);
+
     const [open, setOpen] = useState(false);
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
+    const [showDeletedDialog, setShowDeletedDialog] = useState(false)
+
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [isReload, setIsReload] = useState(false)
-    const { menu, loading } = useSelector((state) => state.menuReducer);
-    const dispatch = useDispatch();
     const [showSubOrders, setShowSubOrders] = useState([])
+    const [deleteSalesOrderItemId, setDeleteSalesOrderItemId] = useState(null)
+    const [deleteSalesOrderItemName, setDeleteSalesOrderItemName] = useState(null)
+
+    //Add items modal
+    const [openItems, setOpenItems] = useState(false)
 
     useEffect(() => {
         dispatch(fetchMenu(params.menu));
-    }, [dispatch, isReload]);
+    }, [isReload]);
+
+    useEffect(() => {
+       if(isReload) {
+            setIsReload(false)
+       }
+    }, [isReload]);
 
     const handleSubOrders = (orderId) => {
         if(showSubOrders.includes(orderId)){
@@ -27,7 +47,31 @@ export default function MenuPage({params}) {
         }
     }
 
+    const handleDeleteSalesOrderItem = (salesOrderId) => {
+        dispatch(deleteSalesOrderItem(salesOrderId))
+        setShowDeletedDialog(true)
+        return new Promise(resolve => {
+            setTimeout(resolve, 1000);
+          }).then(() => {
+            setShowDeletedDialog(false)
 
+            return new Promise(resolve => {
+                setTimeout(resolve, 1000);
+              }).then(() => {
+                setShowConfirmationDialog(false)
+                return new Promise(resolve => {
+                    setTimeout(resolve, 1000);
+                  }).then(() => {
+                    setIsReload(true)
+                    return new Promise(resolve => {
+                        setTimeout(resolve, 1000);
+                      }).then(() => {
+                        setIsReload(false)
+                      });
+                  });
+              });
+          });
+    }
 
     return (
         <>
@@ -45,12 +89,21 @@ export default function MenuPage({params}) {
                                 </p>
                             </div>
                             <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                                <Link
+                                {/* <Link
                                   href={`/overview/orders/${params.menu}/items`}
                                     className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                                 >
                                     Add Item
-                                </Link>
+                                </Link> */}
+                                 <button
+                                    type="button"
+                                    className="block rounded-md bg-yellow-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                                    onClick={() => {
+                                        setOpenItems(true)
+                                    }}
+                                >
+                                    Add sales item
+                                </button>
                             </div>
                         </div>
                         <div className="mt-8 flow-root">
@@ -131,7 +184,16 @@ export default function MenuPage({params}) {
                                                            : <></>
                                                            }
                                                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 ">
-                                                               <TrashIcon className='w-6 h-6 text-red-500'/>
+                                                               <TrashIcon 
+                                                                    onClick={()=> {
+                                                                        setShowConfirmationDialog(true)
+                                                                        setDeleteSalesOrderItemId(item["__id"])
+                                                                        setDeleteSalesOrderItemName(item.itemData.name)
+                                                                        dispatch(fetchSalesOrderItem(item["__id"]))
+                                                                        
+                                                                    }} 
+                                                                    className='w-6 h-6 text-red-500 cursor-pointer'
+                                                                />
                                                            </td>
                                                        </tr>
                                                        {   
@@ -181,7 +243,7 @@ export default function MenuPage({params}) {
                                                                                    showSubOrders.includes(subitem["__id"]) ?
                                                                                        subitem.subOrders && subitem.subOrders.length != 0 &&
                                                                                            subitem.subOrders.map((subitemOrder) => {
-                                                                                            console.log(subitemOrder["is quantity hidden"])
+                                                                                            
                                                                                                return (
                                                                                                    <tr 
                                                                                                        key={subitemOrder["__id"]}
@@ -229,17 +291,64 @@ export default function MenuPage({params}) {
                                             }
                                         </tbody>
                                     </table>
-                                    {
+                                  <div>
+                                  {
                                         open &&
 
                                         <OrdersModal key={selectedIndex} item={menu?.data?.filter(el => el["__id"] == selectedIndex)[0]} open={open && selectedIndex !== null} setOpen={setOpen} index={selectedIndex} setIsReload={setIsReload}/>
                                     }
+                                    {
+                                        showConfirmationDialog &&
+                                            !salesOrderItemLoading ? 
+                                            <>
+                                             <ConfirmationDialog 
+                                                key={deleteSalesOrderItemId}
+                                                id={deleteSalesOrderItemId}
+                                                open={showConfirmationDialog} 
+                                                setOpen={setShowConfirmationDialog}  
+                                                title={deleteSalesOrderItemName} 
+                                                handleDeleteSalesOrderItem={handleDeleteSalesOrderItem}
+                                                action="delete"
+                                            />
+                                            </>
+                                            : 
+                                            <>
+                                            <ConfirmationDialog 
+                                                key={deleteSalesOrderItemId}
+                                                id={deleteSalesOrderItemId}
+                                                open={showConfirmationDialog} 
+                                                setOpen={setShowConfirmationDialog}  
+                                                title={"Loading ..."} 
+                                                handleDeleteSalesOrderItem={handleDeleteSalesOrderItem}
+                                                action="loading"
+                                            />
+                                            </>
+                                    }
+                                    {
+                                        showDeletedDialog &&
+                                        <ConfirmationDialog 
+                                            key={deleteSalesOrderItemId}
+                                            id={deleteSalesOrderItemId}
+                                            open={showConfirmationDialog} 
+                                            setOpen={setShowConfirmationDialog}  
+                                            title={"Deleted!"} 
+                                            handleDeleteSalesOrderItem={handleDeleteSalesOrderItem}
+                                            action="loading"
+                                        />
+
+                                    }
+
+                                  </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            {/* Add Items */}
+            <ItemsModal openItems={openItems} setOpenItems={setOpenItems} params={params.menu} setIsReload={setIsReload} /> 
             </div>
+
+
         </>
     );
 }
