@@ -1,9 +1,10 @@
 
 "use client";
 
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFaqs } from '../../../../redux/faqs/actions';
-import { useEffect } from 'react';
+import Fuse from 'fuse.js';
 
 const faqsTest = [
     {
@@ -33,39 +34,68 @@ export default function FaqPage() {
     const { faqs, loading } = useSelector((state) => state.faqsReducer);
     const dispatch = useDispatch();
 
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+
+      // Fuse.js options for fuzzy searching
+    const fuse = new Fuse(faqsTest, {
+        keys: ['question', 'answer'], // Search both question and answer fields
+        threshold: 0.3, // Adjust the sensitivity of the search (0 = perfect match, 1 = broad match)
+    });
+
+    const handleSearch = (e) => {
+ 
+        setQuery(e.target.value);
+        if (e.target.value) {
+            const searchResult = fuse.search(e.target.value);
+            setResults(searchResult.map(result => result.item));
+        } else {
+            setResults([]);
+        }
+    };
+
+
+
     useEffect(() => {
         dispatch(fetchFaqs());
     }, [dispatch]);
 
     return (
-        // <div className="bg-white">
-        //     <div className="mx-auto max-w-7xl px-6 py-24 sm:pt-32 lg:px-8 lg:py-40">
-        //         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-        //             <div className="lg:col-span-5">
-        //                 <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
-        //                 <p className="mt-4 text-base leading-7 text-gray-600">
-        //                     Can’t find the answer you’re looking for? Reach out to our{' '}
-        //                     <a href="#" className="font-semibold text-yellow-600 hover:text-yellow-500">
-        //                         customer support
-        //                     </a>{' '}
-        //                     team.
-        //                 </p>
-        //             </div>
-        //             <div className="mt-10 lg:col-span-7 lg:mt-0">
-        //                 <dl className="space-y-10">
-        //                     {faqs.map((faq) => (
-        //                         <div key={faq.question}>
-        //                             <dt className="text-base font-semibold leading-7 text-gray-900">{faq.question}</dt>
-        //                             <dd className="mt-2 text-base leading-7 text-gray-600">{faq.answer}</dd>
-        //                         </div>
-        //                     ))}
-        //                 </dl>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
+        <>
         <div className="bg-white">
             <div className="mx-auto max-w-7xl px-1 py-16 sm:py-24 lg:px-8">
+                
+                <div className='mt-10 text-center'>
+                    <h1 className='text-2xl font-bold leading-7'>FAQ Search</h1>
+                    <div className='flex justify-center'>
+                        <input 
+                            className='rounded-lg mt-10 w-[60%] py-3'
+                            placeholder="Search FAQs..."
+                            value={query}
+                            onChange={handleSearch}
+                        />
+                    </div>
+                </div>
+                <div className="mt-10">
+                    <dl className="sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8">
+                        { results.length != 0 ? 
+                            results.map((faq) => (
+                                <div key={faq.question}>
+                                    <dt className="text-lg font-semibold leading-7 text-gray-900 cbu-accent-text">{faq.question}</dt>
+                                    <dd className="mt-2 text-base leading-7 text-gray-600">{faq.answer}</dd>
+                                </div>
+                            ))
+                            :
+                            faqsTest.map((faq) => (
+                                <div key={faq.question}>
+                                    <dt className="text-lg font-semibold leading-7 text-gray-900 cbu-accent-text">{faq.question}</dt>
+                                    <dd className="mt-2 text-base leading-7 text-gray-600">{faq.answer}</dd>
+                                </div>
+                            ))
+                        }
+                    </dl>
+                </div>
+                <hr className='mt-10 mb-10' />
                 <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
                 <p className="mt-6 max-w-2xl text-base leading-7 text-gray-600">
                     Have a different question and can’t find the answer you’re looking for? Reach out to our support team by{' '}
@@ -75,19 +105,9 @@ export default function FaqPage() {
                     and we’ll get back to you as soon as we can.
                 </p>
                 <div className="py-5">
-                    <hr />
-                </div>
-                <div className="mt-20">
-                    <dl className="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8">
-                        {faqs.map((faq) => (
-                            <div key={faq.question}>
-                                <dt className="text-base font-semibold leading-7 text-gray-900 cbu-accent-text">{faq.question}</dt>
-                                <dd className="mt-2 text-base leading-7 text-gray-600">{faq.answer}</dd>
-                            </div>
-                        ))}
-                    </dl>
                 </div>
             </div>
         </div>
+    </>
     )
 }
