@@ -33,6 +33,7 @@ export default function ItemsPage({params}) {
 	const [itemCart, setItemCart] = useState([])
 	const [selectedCartItemID, setSelectedCartItemID] = useState("")
 	const [selectedCartSubItemID, setSelectedCartSubItemID] = useState("")
+	// console.log("Hello")
 
 	useEffect(() => {
 		dispatch(fetchSalesItems());
@@ -458,9 +459,6 @@ export default function ItemsPage({params}) {
 																			</>
 																		)
 																	})
-																
-																
-
 															}															
 														</>
 													)

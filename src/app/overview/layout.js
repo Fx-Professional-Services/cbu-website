@@ -1,25 +1,19 @@
 "use client";
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { dancing_script } from '../fonts';
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react';
 import {
     Bars3Icon,
     CalendarIcon,
-    ChartPieIcon,
     ClipboardDocumentIcon,
     ClipboardDocumentListIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
-    HomeIcon,
     QuestionMarkCircleIcon,
-    UsersIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { store } from '../../../store';
+    XMarkIcon
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Fragment, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import { useEffect } from 'react';
+import { store } from '../../../store';
+import { dancing_script } from '../fonts';
 
 let navigation = [
     { name: 'Planner', href: '/overview/planner', icon: CalendarIcon, current: false },
@@ -52,11 +46,12 @@ export default function Sidebar({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [userName, setUserName] = useState(null);
     const pathname = usePathname();
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         setUserName(window.localStorage.getItem('display_name'));
     }, []);
-
+    
     if(userName){return (
         <Provider store={store}>
             {/*
@@ -301,9 +296,10 @@ export default function Sidebar({ children }) {
         </Provider>
     )
     }
-    else {
-        return (
-            <div>Loading...</div>
-        );
+     else {
+        
+            return (
+                <div>Loading...</div>
+            );
     }
 }

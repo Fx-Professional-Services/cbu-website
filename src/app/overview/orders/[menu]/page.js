@@ -20,11 +20,13 @@ export default function MenuPage({params}) {
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
     const [showDeletedDialog, setShowDeletedDialog] = useState(false)
 
+    const [salesOrderItems, setSalesOrderItems] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [isReload, setIsReload] = useState(false)
     const [showSubOrders, setShowSubOrders] = useState([])
     const [deleteSalesOrderItemId, setDeleteSalesOrderItemId] = useState(null)
     const [deleteSalesOrderItemName, setDeleteSalesOrderItemName] = useState(null)
+    const [error, setError] = useState(false);
 
     //Add items modal
     const [openItems, setOpenItems] = useState(false)
@@ -75,7 +77,9 @@ export default function MenuPage({params}) {
 
     return (
         <>
-            <div className="container xl:w-full">
+           {
+                !error ? 
+                <div className="container xl:w-full">
                 <div className="overflow-hidden bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
 
@@ -295,7 +299,7 @@ export default function MenuPage({params}) {
                                   {
                                         open &&
 
-                                        <OrdersModal key={selectedIndex} item={menu?.data?.filter(el => el["__id"] == selectedIndex)[0]} open={open && selectedIndex !== null} setOpen={setOpen} index={selectedIndex} setIsReload={setIsReload}/>
+                                        <OrdersModal key={selectedIndex} item={menu?.data?.filter(el => el["__id"] == selectedIndex)[0]} open={open && selectedIndex !== null} setOpen={setOpen} index={selectedIndex} setIsReload={setIsReload} error={error} setError={setError}/>
                                     }
                                     {
                                         showConfirmationDialog &&
@@ -345,8 +349,16 @@ export default function MenuPage({params}) {
                     </div>
                 </div>
             {/* Add Items */}
-            <ItemsModal openItems={openItems} setOpenItems={setOpenItems} params={params.menu} setIsReload={setIsReload} /> 
+            <ItemsModal openItems={openItems} setOpenItems={setOpenItems} params={params.menu} setIsReload={setIsReload} isReload={isReload} /> 
             </div>
+
+            : <>
+
+                Internal Server Error
+            
+            
+            </>
+           }
 
 
         </>
