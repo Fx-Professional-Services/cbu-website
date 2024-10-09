@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteSalesOrderItem } from '../../../../../redux/delete_sales_order_item/actions';
 import { fetchSalesOrderItem } from '../../../../../redux/get_sales_order_item/actions';
 import { fetchMenu } from '../../../../../redux/menu/actions';
+import getParentChildOrderItems from '../../../../../util/getParentChildOrderItems';
 
 export default function MenuPage({params}) {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function MenuPage({params}) {
     const { deleted, loading: deleteLoading} = useSelector((state) => state.deleteSalesOrderItemReducer);
 
     const [open, setOpen] = useState(false);
+    const [subItemOpen, setSubItemOpen] = useState(false)
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
     const [showDeletedDialog, setShowDeletedDialog] = useState(false)
 
@@ -27,6 +29,8 @@ export default function MenuPage({params}) {
     const [deleteSalesOrderItemId, setDeleteSalesOrderItemId] = useState(null)
     const [deleteSalesOrderItemName, setDeleteSalesOrderItemName] = useState(null)
     const [error, setError] = useState(false);
+
+    // console.log(menu)
 
     //Add items modal
     const [openItems, setOpenItems] = useState(false)
@@ -40,6 +44,22 @@ export default function MenuPage({params}) {
             setIsReload(false)
        }
     }, [isReload]);
+
+    useEffect(() => {
+        if(!loading){
+            updateSalesOrderItemHierarchy(menu)
+        } else {
+            setSalesOrderItems([])
+        }
+
+    }, [loading])
+
+    console.log(salesOrderItems)
+
+    async function updateSalesOrderItemHierarchy (salesOrder) {
+        let items = getParentChildOrderItems(salesOrder)
+        setSalesOrderItems(items)
+    }
 
     const handleSubOrders = (orderId) => {
         if(showSubOrders.includes(orderId)){
@@ -232,12 +252,20 @@ export default function MenuPage({params}) {
                                                                                 </td>
                                                                                <td className="whitespace-nowrap px-3 py-4 text-sm"> ${subitem.price}.00</td>
                                                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                                                                   {subitem.itemData["is configuration"] === 1 && (
-                                                                                       <a  className='cursor-pointer hover:text-yellow-700' onClick={() => handleClick(subitem["__id"])}>
-                                                                                       {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                                   { subitem.itemData["is configuration"] === 1 && (
+                                                                                       <a  className='cursor-pointer hover:text-yellow-700'
+                                                                                            onClick={() => {
+                                                                                                setSubItemOpen(true)
+                                                                                                setSelectedIndex(subitem["__id"])
+                                                                                            }} 
+                                                                                        >
+                                                                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
-                                                                                       </svg> */}
-                                                                                       <OrdersModal key={subitem?.itemData["__id"]} item={subitem.itemData["is configuration"] === 1 && subitem} open={open && selectedIndex == subitem["__id"]} setOpen={setOpen} index={selectedIndex} setIsReload={setIsReload}/>
+                                                                                       </svg>
+                                                                                       {
+                                                                                        subItemOpen && selectedIndex == subitem["__id"] &&
+                                                                                        <OrdersModal key={subitem?.itemData["__id"]} item={subitem.itemData["is configuration"] === 1 && subitem} open={subItemOpen && selectedIndex == subitem["__id"]} setOpen={setSubItemOpen} index={selectedIndex} setIsReload={setIsReload}/>
+                                                                                       }
                                                                                        
                                                                                    </a>
                                                                                    )}
