@@ -2,9 +2,9 @@ const host = process.env.NEXT_PUBLIC_API_URL;
 const version = process.env.NEXT_PUBLIC_FM_API_VERSION;
 
 export default async function handler(req, res) {
-    const { token, userID } = req.body;
+    const { token, orderID } = req.body;
     const response = await fetch(
-      `${host}/fmi/data/${version}/databases/horizon order/layouts/query: Sales Orders (CBU website)/_find`,
+      `${host}/fmi/data/${version}/databases/Horizon Order/layouts/query: sales order v1/_find`,
       {
         method: "POST",
         headers: {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           query: [
             {
-              "sales order__PARTY::id": "==" + userID,
+              "SalesOrder::__id": "==" + orderID,
             },
           ],
         }),
